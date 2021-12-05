@@ -1,0 +1,8 @@
+/venv
+.idea/
+.env
+
+*.pyc
+migrations/
+__pycache__/
+media/

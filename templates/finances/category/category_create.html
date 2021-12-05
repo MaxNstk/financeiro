@@ -1,0 +1,12 @@
+{% load crispy_forms_tags static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8"/>
+    <title> Crie sua categoria </title>
+</head>
+<body>
+    {% csrf_token %}
+    {% crispy form %}
+</body>
+</html>
