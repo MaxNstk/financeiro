@@ -1,6 +1,7 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
+from django.utils.text import slugify
 
 from finances.models import Category
 
@@ -21,3 +22,14 @@ class CategoryCreateForm(forms.ModelForm):
         super(CategoryCreateForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', 'Salvar'))
+
+    def clean_name(self):
+
+        name = self.cleaned_data['name']
+        try:
+            if Category.objects.get(slug=slugify(name)).exists():
+                raise forms.ValidationError(
+                    'Ja existe uma categoria com esse nome')
+        except:
+            pass
+        return name
