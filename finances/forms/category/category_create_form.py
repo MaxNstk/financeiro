@@ -15,7 +15,7 @@ class CategoryCreateForm(forms.ModelForm):
                    'slug': forms.HiddenInput()}
 
     name = forms.CharField(label='Nome', max_length=50)
-    description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea())
+    description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea(), required=False)
     image = forms.ImageField(label='Imagem')
 
     def __init__(self, *args, **kwargs):

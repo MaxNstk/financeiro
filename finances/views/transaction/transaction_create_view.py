@@ -8,7 +8,7 @@ class TransactionCreateView(CreateView):
     model = Transaction
     success_url = '/'
     form_class = TransactionCreateForm
-    template_name = 'finances/category/category_create.html'
+    template_name = 'finances/transaction/transaction_form.html'
 
     def form_valid(self, form):
         form.instance.user = self.request.user

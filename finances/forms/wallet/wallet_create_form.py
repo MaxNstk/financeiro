@@ -15,7 +15,7 @@ class WalletCreateForm(forms.ModelForm):
         widgets = {'user': forms.HiddenInput()}
 
     name = forms.CharField(label=mark_safe('<b>Nome da Carteira</b>'), max_length=50)
-    description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea())
+    description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea(), required=False)
     balance = forms.FloatField(label=mark_safe('<b>Saldo inicial da carteira</b>'))
 
     def __init__(self, *args, **kwargs):

@@ -1,0 +1,46 @@
+{% extends 'app/base.html' %}
+
+{% block page-title %} Transações {% endblock %}
+
+{% block content %}
+    <a href="{% url 'finances:transaction_create' %}" class="box-title btn btn-primary"> Adicionar Transação </a>
+    <div class="row">
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <div class="table-responsive">
+                                <table class="table text-nowrap">
+                                    <thead>
+                                        <tr>
+
+                                            <th class="border-top-0"><b>ID</b></th>
+                                            <th class="border-top-0"><b>Nome</b></th>
+                                            <th class="border-top-0"><b>Carteira</b></th>
+                                            <th class="border-top-0"><b>Categoria</b></th>
+                                            <th class="border-top-0"><b>Tipo</b></th>
+                                            <th class="border-top-0"><b>Valor</b></th>
+                                            <th class="border-top-0"><b>Data</b></th>
+                                            <th class="border-top-0"><b>Descrição</b></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for object in transaction_list %}
+                                        <tr>
+                                            <td>{{ object.id }}</td>
+                                            <td>{{ object.name }}</td>
+                                            <td>{{ object.wallet }}</td>
+                                            <td>{{ object.category }}</td>
+                                            <td>{{ object.type }}</td>
+                                            <td>{{ object.value }}</td>
+                                            <td>{{ object.date }}</td>
+                                            <td>{{ object.description }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+{% endblock %}

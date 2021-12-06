@@ -9,7 +9,7 @@ class CategoryCreateView(CreateView):
     model = Category
     success_url = '/'
     form_class = CategoryCreateForm
-    template_name = 'finances/category/category_create.html'
+    template_name = 'finances/category/category_form.html'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
