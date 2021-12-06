@@ -28,6 +28,14 @@ class TransactionCreateForm(forms.ModelForm):
         self.helper.layout = self.build_layout()
         self.helper.add_input(Submit('submit', 'Salvar'))
 
+    def clean_value(self):
+        value = self.cleaned_data['value']
+        if value <= 0:
+            raise forms.ValidationError('Não é possível adicionar valores menores que zero, '
+                                        'caso necessário mude o Tipo da Transação')
+        return value
+
+
     def build_layout(self):
         return Layout(
             Div(
