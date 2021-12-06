@@ -8,7 +8,7 @@ class WalletCreateView(CreateView):
 
     model = Wallet
     form_class = WalletCreateForm
-    template_name = 'finances/wallet/wallet_create.html'
+    template_name = 'finances/wallet/wallet_form.html'
     success_url = '/'
 
     def form_valid(self, form):

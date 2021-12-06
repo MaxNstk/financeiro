@@ -10,8 +10,8 @@ class Transaction(BaseModel):
     CREDIT = 1
     EXPENSE = 2
 
-    type_CHOICES = [(CREDIT, 'CREDIT'),
-                    (EXPENSE, 'EXPENSE')]
+    type_CHOICES = [(CREDIT, 'Renda'),
+                    (EXPENSE, 'Despesa')]
 
     name = models.CharField(max_length=250)
     category = models.ForeignKey('Category', on_delete=models.DO_NOTHING)

@@ -1,0 +1,12 @@
+{% extends 'app/base.html' %}
+{% load crispy_forms_tags static %}
+
+
+{% block title %} Crie sua Transação {% endblock %}
+
+{% block content %}
+
+    {% csrf_token %}
+    {% crispy form %}
+
+{% endblock %}

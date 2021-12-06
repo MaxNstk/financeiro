@@ -1,0 +1,36 @@
+{% extends 'app/base.html' %}
+
+{% block page-title %} Carteiras {% endblock %}
+
+{% block content %}
+    <a href="{% url 'finances:wallet_create' %}" class="box-title btn btn-primary"> Adicionar Carteira </a>
+    <div class="row">
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <div class="table-responsive">
+                                <table class="table text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-top-0"><b>ID</b></th>
+                                            <th class="border-top-0"><b>Nome</b></th>
+                                            <th class="border-top-0"><b>Descrição</b></th>
+                                            <th class="border-top-0"><b>Valor atual</b></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for object in wallet_list %}
+                                        <tr>
+                                            <td>{{ object.id }}</td>
+                                            <td>{{ object.name }}</td>
+                                            <td>{{ object.description }}</td>
+                                            <td>{{ object.balance }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+{% endblock %}

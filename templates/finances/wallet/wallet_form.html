@@ -1,0 +1,12 @@
+{% extends 'app/base.html' %}
+{% load crispy_forms_tags static %}
+
+
+{% block page-title %} Crie sua Carteira {% endblock %}
+
+{% block content %}
+
+    {% csrf_token %}
+    {% crispy form %}
+
+{% endblock %}

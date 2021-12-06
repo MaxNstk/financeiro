@@ -1,12 +1,12 @@
+{% extends 'app/base.html' %}
 {% load crispy_forms_tags static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8"/>
-    <title> Crie sua categoria </title>
-</head>
-<body>
+
+
+{% block title %} Crie sua categoria {% endblock %}
+
+{% block content %}
+
     {% csrf_token %}
     {% crispy form %}
-</body>
-</html>
+
+{% endblock %}
