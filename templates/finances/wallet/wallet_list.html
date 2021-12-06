@@ -15,6 +15,7 @@
                                             <th class="border-top-0"><b>Nome</b></th>
                                             <th class="border-top-0"><b>Descrição</b></th>
                                             <th class="border-top-0"><b>Valor atual</b></th>
+                                            <th class="border-top-0"><b>Editar</b></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -24,6 +25,8 @@
                                             <td>{{ object.name }}</td>
                                             <td>{{ object.description }}</td>
                                             <td>{{ object.balance }}</td>
+                                            <td> <a  href="{% url 'finances:wallet_update' object.id %}" class="btn btn-primary">
+                                                <i class="fa fa-table" aria-hidden="true"></i></a> </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>
