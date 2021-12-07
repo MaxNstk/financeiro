@@ -11,9 +11,7 @@ class CategoryCreateForm(forms.ModelForm):
 
     class Meta:
         model = Category
-        fields = '__all__'
-        widgets = {'user': forms.HiddenInput(),
-                   'slug': forms.HiddenInput()}
+        exclude = ['user', 'slug']
 
     name = forms.CharField(label=mark_safe('<b>Nome</b>'), max_length=50)
     description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea(), required=False)

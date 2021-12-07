@@ -1,5 +1,6 @@
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 
 from account.models.base import BaseModel
 from finances.models.wallet import Wallet
@@ -25,14 +26,28 @@ class Transaction(BaseModel):
     def __str__(self):
         return self.name
 
+@receiver(post_save, sender=Transaction)
+def create_transaction(instance, created, **kwargs):
 
-def update_wallet_value(sender, instance, **kwargs):
-    wallet = Wallet.objects.get(id=instance.wallet.id)
-    if instance.type == Transaction.CREDIT:
-        wallet.balance += instance.value
-    else:
-        wallet.balance -= instance.value
-    wallet.save()
+    if created:
+        wallet = Wallet.objects.get(id=instance.wallet.id)
+        if instance.type == Transaction.CREDIT:
+            wallet.balance += instance.value
+        else:
+            wallet.balance -= instance.value
+        wallet.save()
 
 
-post_save.connect(update_wallet_value, sender=Transaction)
+@receiver(pre_save, sender=Transaction)
+def update_transaction(instance, **kwargs):
+
+    try:
+        transaction = Transaction.objects.get(instance.id)
+        wallet = Wallet.objects.get(id=instance.wallet.id)
+        if transaction.type == Transaction.CREDIT:
+            wallet.balance -= transaction.value
+        else:
+            transaction.balance += transaction.value
+        wallet.save()
+    except:
+        pass

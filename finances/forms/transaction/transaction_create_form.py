@@ -10,8 +10,7 @@ class TransactionCreateForm(forms.ModelForm):
 
     class Meta:
         model = Transaction
-        fields = '__all__'
-        widgets = {'user': forms.HiddenInput()}
+        exclude = ['user']
 
     name = forms.CharField(label=mark_safe('<b> Nome </b>'), max_length=50)
     value = forms.FloatField(label=mark_safe('<b> Valor da Transação </b>'))
@@ -34,7 +33,6 @@ class TransactionCreateForm(forms.ModelForm):
             raise forms.ValidationError('Não é possível adicionar valores menores que zero, '
                                         'caso necessário mude o Tipo da Transação')
         return value
-
 
     def build_layout(self):
         return Layout(

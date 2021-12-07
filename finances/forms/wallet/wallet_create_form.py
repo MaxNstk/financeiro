@@ -11,8 +11,7 @@ class WalletCreateForm(forms.ModelForm):
 
     class Meta:
         model = Wallet
-        fields = '__all__'
-        widgets = {'user': forms.HiddenInput()}
+        exclude = ['user']
 
     name = forms.CharField(label=mark_safe('<b>Nome da Carteira</b>'), max_length=50)
     description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea(), required=False)
