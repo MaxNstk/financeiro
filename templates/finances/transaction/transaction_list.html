@@ -19,7 +19,7 @@
                                             <th class="border-top-0"><b>Tipo</b></th>
                                             <th class="border-top-0"><b>Valor</b></th>
                                             <th class="border-top-0"><b>Data</b></th>
-                                            <th class="border-top-0"><b>Descrição</b></th>
+                                            <th class="border-top-0"><b>Editar</b></th>
 
                                         </tr>
                                     </thead>
@@ -30,10 +30,17 @@
                                             <td>{{ object.name }}</td>
                                             <td>{{ object.wallet }}</td>
                                             <td>{{ object.category }}</td>
-                                            <td>{{ object.type }}</td>
+                                            <td>
+                                                {% if object.type == 1%}
+                                                    Renda
+                                                {% else %}
+                                                    Despesa
+                                                {% endif %}
+                                            </td>
                                             <td>{{ object.value }}</td>
                                             <td>{{ object.date }}</td>
-                                            <td>{{ object.description }}</td>
+                                            <td> <a  href="{% url 'finances:transaction_update' object.id %}" class="btn btn-primary">
+                                                <i class="fa fa-table" aria-hidden="true"></i></a> </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>

@@ -1,21 +1,20 @@
 from django.urls import reverse_lazy
-from django.utils.text import slugify
-from django.views.generic import CreateView
+from django.views.generic import UpdateView
 
 from finances.forms.category.category_create_form import CategoryCreateForm
 from finances.models import Category
 
 
-class CategoryCreateView(CreateView):
+class CategoryUpdateView(UpdateView):
+
     model = Category
-    success_url = reverse_lazy('finances:category_list')
     form_class = CategoryCreateForm
+    success_url = reverse_lazy('finances:category_list')
     template_name = 'finances/category/category_form.html'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        form.instance.slug = slugify(form.cleaned_data['name'])
         try:
-            return super(CategoryCreateView, self).form_valid(form)
+            return super(CategoryUpdateView, self).form_valid(form)
         except Exception as e:
-            return self.form_invalid(form)
+            return e

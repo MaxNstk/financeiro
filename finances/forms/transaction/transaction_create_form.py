@@ -30,8 +30,8 @@ class TransactionCreateForm(forms.ModelForm):
     def clean_value(self):
         value = self.cleaned_data['value']
         if value <= 0:
-            raise forms.ValidationError('Não é possível adicionar valores menores que zero, '
-                                        'caso necessário mude o Tipo da Transação')
+            raise forms.ValidationError('Não é possível adicionar valores igual à zero ou inferiores. '
+                                        'Caso necessário mude o Tipo da Transação')
         return value
 
     def build_layout(self):
