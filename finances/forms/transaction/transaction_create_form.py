@@ -27,6 +27,25 @@ class TransactionCreateForm(forms.ModelForm):
         self.helper.layout = self.build_layout()
         self.helper.add_input(Submit('submit', 'Salvar'))
 
+    def clean(self):
+
+        wallet = self.cleaned_data['wallet']
+        try:
+            old_transaction = self.instance
+            new_transaction = self.cleaned_data
+
+            if old_transaction.type == Transaction.CREDIT:
+                wallet.balance -= old_transaction.value
+            else:
+                wallet.balance += old_transaction.value
+
+            if new_transaction['type'] == Transaction.EXPENSE:
+                if wallet.balance - new_transaction['value'] < 0:
+                    raise forms.ValidationError('O valor da despesa informada é maior que o saldo da Carteira. '
+                                                'Saldo atual: '+str(wallet.balance)+'.')
+        except:
+            pass
+
     def clean_value(self):
         value = self.cleaned_data['value']
         if value <= 0:
