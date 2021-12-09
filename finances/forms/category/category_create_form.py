@@ -15,7 +15,6 @@ class CategoryCreateForm(forms.ModelForm):
 
     name = forms.CharField(label=mark_safe('<b>Nome</b>'), max_length=50)
     description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea(), required=False)
-    image = forms.ImageField(label='Imagem', required=False)
 
     def __init__(self, *args, **kwargs):
         super(CategoryCreateForm, self).__init__(*args, **kwargs)

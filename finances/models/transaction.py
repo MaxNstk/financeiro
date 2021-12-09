@@ -17,11 +17,10 @@ class Transaction(BaseModel):
                     (EXPENSE, 'Despesa')]
 
     name = models.CharField(max_length=250)
-    category = models.ForeignKey('Category', on_delete=models.DO_NOTHING)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)
     wallet = models.ForeignKey('Wallet', on_delete=models.CASCADE)
     type = models.IntegerField(choices=type_CHOICES, default=2)
     value = models.FloatField()
-    image = models.ImageField(upload_to='images/transaction/', null=True, blank=True)
     description = models.TextField(max_length=255, null=True, blank=True)
     date = models.DateField(default=datetime.now)
 

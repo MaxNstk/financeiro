@@ -16,7 +16,6 @@ class TransactionCreateForm(forms.ModelForm):
 
     name = forms.CharField(label=mark_safe('<b> Nome </b>'), max_length=50)
     value = forms.FloatField(label=mark_safe('<b> Valor da Transação </b>'))
-    image = forms.ImageField(label='Imagem', required=False)
     description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea(), required=False)
     date = forms.DateField(label=mark_safe('<b> Data </b>'), initial=datetime.now)
 
