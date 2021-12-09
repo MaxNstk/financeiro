@@ -6,7 +6,8 @@ from finances.views.category.category_update import CategoryUpdateView
 from finances.views.transaction.transaction_create_view import TransactionCreateView
 from finances.views.transaction.transaction_list import TransactionListView
 from finances.views.transaction.transaction_update import TransactionUpdateView
-from finances.views.wallet.wallet_create import WalletCreateView
+from finances.views.wallet.wallet_create_view import WalletCreateView
+from finances.views.wallet.wallet_delete_view import WalletDeleteView
 from finances.views.wallet.wallet_list import WalletListView
 from finances.views.wallet.wallet_update import WalletUpdateView
 
@@ -16,6 +17,7 @@ urlpatterns = [
     path('wallet_create', WalletCreateView.as_view(), name='wallet_create'),
     path('wallet_list', WalletListView.as_view(), name='wallet_list'),
     path('wallet_update/<int:pk>', WalletUpdateView.as_view(), name='wallet_update'),
+    path('wallet_delete/<int:pk>', WalletDeleteView.as_view(), name='wallet_delete'),
 
     path('category_create', CategoryCreateView.as_view(), name='category_create'),
     path('category_list', CategoryListView.as_view(), name='category_list'),
