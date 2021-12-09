@@ -27,30 +27,35 @@ class TransactionCreateForm(forms.ModelForm):
         self.helper.layout = self.build_layout()
         self.helper.add_input(Submit('submit', 'Salvar'))
 
-    def clean(self):
+    def clean_value(self):
 
-        wallet = self.cleaned_data['wallet']
-        try:
-            old_transaction = self.instance
-            new_transaction = self.cleaned_data
+        cl = self.cleaned_data
 
+        # validates if the transaction value is bigger than 0
+        value = cl['value']
+        if value <= 0:
+            raise forms.ValidationError('Não é possível adicionar valores igual à zero ou inferiores. '
+                                        'Caso necessário mude o Tipo da Transação')
+
+        wallet = cl['wallet']
+        current_transaction = self.cleaned_data
+
+        # check if is a update
+        if self.instance.id:
+            old_transaction = Transaction.objects.get(id=self.instance.id)
+
+            # decreases the old value from the wallet balance
             if old_transaction.type == Transaction.CREDIT:
                 wallet.balance -= old_transaction.value
             else:
                 wallet.balance += old_transaction.value
 
-            if new_transaction['type'] == Transaction.EXPENSE:
-                if wallet.balance - new_transaction['value'] < 0:
-                    raise forms.ValidationError('O valor da despesa informada é maior que o saldo da Carteira. '
-                                                'Saldo atual: '+str(wallet.balance)+'.')
-        except:
-            pass
+        if current_transaction['type'] == Transaction.EXPENSE:
 
-    def clean_value(self):
-        value = self.cleaned_data['value']
-        if value <= 0:
-            raise forms.ValidationError('Não é possível adicionar valores igual à zero ou inferiores. '
-                                        'Caso necessário mude o Tipo da Transação')
+            # if expense, check if the wallet has sufficient money in the balance
+            if wallet.balance - current_transaction['value'] < 0:
+                raise forms.ValidationError('Valor excede o limite. O saldo disponível da carteira é: R$: '+str(wallet.balance))
+
         return value
 
     def build_layout(self):
