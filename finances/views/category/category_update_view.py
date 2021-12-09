@@ -1,14 +1,14 @@
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
-from finances.forms.category.category_create_form import CategoryCreateForm
+from finances.forms.category.category_form import CategoryForm
 from finances.models import Category
 
 
 class CategoryUpdateView(UpdateView):
 
     model = Category
-    form_class = CategoryCreateForm
+    form_class = CategoryForm
     success_url = reverse_lazy('finances:category_list')
     template_name = 'finances/category/category_form.html'
 

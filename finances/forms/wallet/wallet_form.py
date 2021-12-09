@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 from finances.models import Wallet
 
 
-class WalletCreateForm(forms.ModelForm):
+class Walletform(forms.ModelForm):
 
     class Meta:
         model = Wallet
@@ -18,7 +18,7 @@ class WalletCreateForm(forms.ModelForm):
     balance = forms.FloatField(label=mark_safe('<b>Saldo inicial da carteira</b>'))
 
     def __init__(self, *args, **kwargs):
-        super(WalletCreateForm, self).__init__(*args, **kwargs)
+        super(Walletform, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = self.build_layout()
         self.helper.add_input(Submit('submit', 'Salvar'))

@@ -7,7 +7,7 @@ from django.utils.text import slugify
 from finances.models import Category
 
 
-class CategoryCreateForm(forms.ModelForm):
+class CategoryForm(forms.ModelForm):
 
     class Meta:
         model = Category
@@ -17,7 +17,7 @@ class CategoryCreateForm(forms.ModelForm):
     description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea(), required=False)
 
     def __init__(self, *args, **kwargs):
-        super(CategoryCreateForm, self).__init__(*args, **kwargs)
+        super(CategoryForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = self.build_layout()
         self.helper.add_input(Submit('submit', 'Salvar'))

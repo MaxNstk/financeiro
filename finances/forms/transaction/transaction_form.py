@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 from finances.models import Transaction
 
 
-class TransactionCreateForm(forms.ModelForm):
+class TransactionForm(forms.ModelForm):
 
     class Meta:
         model = Transaction
@@ -20,7 +20,7 @@ class TransactionCreateForm(forms.ModelForm):
     date = forms.DateField(label=mark_safe('<b> Data </b>'), initial=datetime.now)
 
     def __init__(self, *args, **kwargs):
-        super(TransactionCreateForm, self).__init__(*args, **kwargs)
+        super(TransactionForm, self).__init__(*args, **kwargs)
         self.fields['wallet'].label = mark_safe('<b> Carteira </b>')
         self.fields['category'].label = mark_safe('<b> Categoria </b>')
         self.fields['type'].label = mark_safe('<b> Tipo da Transação </b>')
