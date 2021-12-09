@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
 
 from account.models.base import BaseModel
@@ -48,4 +48,16 @@ def update_wallet_balance(instance, **kwargs):
         wallet.balance += current_transaction.value
     else:
         wallet.balance -= current_transaction.value
+    wallet.save()
+
+
+@receiver(pre_delete, sender=Transaction)
+def update_wallet_balance_on_delete(instance, **kwargs):
+
+    wallet = instance.wallet
+
+    if instance.type == Transaction.CREDIT:
+        wallet.balance -= instance.value
+    else:
+        wallet.balance += instance.value
     wallet.save()
