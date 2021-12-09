@@ -11,7 +11,7 @@ class WalletCreateForm(forms.ModelForm):
 
     class Meta:
         model = Wallet
-        exclude = ['user']
+        exclude = ['user', 'initial_balance']
 
     name = forms.CharField(label=mark_safe('<b>Nome da Carteira</b>'), max_length=50)
     description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea(), required=False)
@@ -22,6 +22,11 @@ class WalletCreateForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = self.build_layout()
         self.helper.add_input(Submit('submit', 'Salvar'))
+
+    def clean_balance(self):
+        if self.cleaned_data['balance'] < 0:
+            raise forms.ValidationError("O saldo inicial deve ser maior ou igual a Zero")
+        return self.cleaned_data['balance']
 
     def build_layout(self):
         return Layout(

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -21,7 +23,7 @@ class Transaction(BaseModel):
     value = models.FloatField()
     image = models.ImageField(upload_to='images/transaction/', null=True, blank=True)
     description = models.TextField(max_length=255, null=True, blank=True)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField(default=datetime.now)
 
     def __str__(self):
         return self.name

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div
 from django import forms
@@ -16,7 +18,7 @@ class TransactionCreateForm(forms.ModelForm):
     value = forms.FloatField(label=mark_safe('<b> Valor da Transação </b>'))
     image = forms.ImageField(label='Imagem', required=False)
     description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea(), required=False)
-    date = forms.DateField(label=mark_safe('<b> Data </b>'))
+    date = forms.DateField(label=mark_safe('<b> Data </b>'), initial=datetime.now)
 
     def __init__(self, *args, **kwargs):
         super(TransactionCreateForm, self).__init__(*args, **kwargs)
