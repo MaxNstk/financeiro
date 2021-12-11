@@ -1,5 +1,4 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
 
 from finances.forms.wallet.wallet_form import Walletform
 from finances.models import Wallet

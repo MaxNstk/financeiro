@@ -1,14 +1,14 @@
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView
 
 from finances.forms.transaction.transaction_form import TransactionForm
 from finances.models import Transaction
+from finances.views.generic.custom_update_view import CustomUpdateView
 
 
-class TransactionUpdateView(UpdateView):
+class TransactionUpdateView(CustomUpdateView):
 
     model = Transaction
-    template_name = 'finances/transaction/transaction_form.html'
+    template_name = 'generic/generic_form.html'
     form_class = TransactionForm
     success_url = reverse_lazy('finances:transaction_list')
 
