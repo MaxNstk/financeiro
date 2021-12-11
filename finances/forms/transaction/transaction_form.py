@@ -1,14 +1,14 @@
 from datetime import datetime
 
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Div
+from crispy_forms.layout import Layout, Div
 from django import forms
 from django.utils.safestring import mark_safe
 
+from finances.forms.generic.custom_model_form import CustomModelForm
 from finances.models import Transaction
 
 
-class TransactionForm(forms.ModelForm):
+class TransactionForm(CustomModelForm):
 
     class Meta:
         model = Transaction
@@ -24,9 +24,6 @@ class TransactionForm(forms.ModelForm):
         self.fields['wallet'].label = mark_safe('<b> Carteira </b>')
         self.fields['category'].label = mark_safe('<b> Categoria </b>')
         self.fields['type'].label = mark_safe('<b> Tipo da Transação </b>')
-        self.helper = FormHelper()
-        self.helper.layout = self.build_layout()
-        self.helper.add_input(Submit('submit', 'Salvar'))
 
     def clean_value(self):
 
@@ -67,14 +64,10 @@ class TransactionForm(forms.ModelForm):
                 css_class= 'row'
             ),
             Div(
-                Div('value', css_class='col-lg-4'),
-                Div('wallet', css_class='col-lg-4'),
-                Div('category', css_class='col-lg-4'),
-                css_class='row'
-            ),
-            Div(
-                Div('date', css_class='col-lg-4'),
-                Div('image', css_class='col-lg-8'),
+                Div('value', css_class='col-lg-3'),
+                Div('wallet', css_class='col-lg-3'),
+                Div('category', css_class='col-lg-3'),
+                Div('date', css_class='col-lg-3'),
                 css_class='row'
             ),
             Div(

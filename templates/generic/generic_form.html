@@ -1,0 +1,18 @@
+{% extends 'generic/base.html' %}
+{% load crispy_forms_tags static %}
+
+{% block page-title %}
+    {% if object %}
+        Atualização de {{ model_name }}
+    {% else %}
+        Criação de {{ model_name }}
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+    {% csrf_token %}
+    {% crispy form %}
+
+{% endblock %}

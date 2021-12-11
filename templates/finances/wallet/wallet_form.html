@@ -1,4 +1,4 @@
-{% extends 'app/base.html' %}
+{% extends 'generic/base.html' %}
 {% load crispy_forms_tags static %}
 
 
@@ -9,9 +9,9 @@
     {% csrf_token %}
     {% crispy form %}
 
-     {% if object %}
-         <a  href="{% url 'finances:wallet_delete' object.id %}" class="btn btn-primary"
-                                                     style="background-color: red"> <b>Deletar</b> </a>
-     {% endif %}
+{#     {% if object %}#}
+{#         <a  href="{% url 'finances:wallet_delete' object.id %}" class="btn btn-primary"#}
+{#                                                     style="background-color: red"> <b>Deletar</b> </a>#}
+{#     {% endif %}#}
 
 {% endblock %}

@@ -6,6 +6,7 @@ from finances.models import Transaction
 
 
 class TransactionCreateView(CreateView):
+
     model = Transaction
     success_url = reverse_lazy('finances:transaction_list')
     form_class = TransactionForm

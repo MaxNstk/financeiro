@@ -3,13 +3,14 @@ from django.views.generic import CreateView
 
 from finances.forms.wallet.wallet_form import Walletform
 from finances.models import Wallet
+from finances.views.generic.custom_create_view import CustomCreateView
 
 
-class WalletCreateView(CreateView):
+class WalletCreateView(CustomCreateView):
 
     model = Wallet
     form_class = Walletform
-    template_name = 'finances/wallet/wallet_form.html'
+    template_name = 'generic/generic_form.html'
     success_url = reverse_lazy('finances:wallet_list')
 
     def form_valid(self, form):
