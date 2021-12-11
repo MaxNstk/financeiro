@@ -12,6 +12,8 @@ class WalletCreateView(CustomCreateView):
     template_name = 'generic/generic_form.html'
     success_url = reverse_lazy('finances:wallet_list')
 
+    breadcrumbs = 'Criação de Carteira'
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         try:

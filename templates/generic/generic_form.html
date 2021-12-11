@@ -2,12 +2,7 @@
 {% load crispy_forms_tags static %}
 
 {% block page-title %}
-    {% if object %}
-        Atualização de {{ model_name }}
-    {% else %}
-        Criação de {{ model_name }}
-    {% endif %}
-
+    {{ breadcrumbs }}
 {% endblock %}
 
 {% block content %}

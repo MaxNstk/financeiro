@@ -7,10 +7,13 @@ from finances.views.generic.custom_create_view import CustomCreateView
 
 
 class CategoryCreateView(CustomCreateView):
+
     model = Category
     success_url = reverse_lazy('finances:category_list')
     form_class = CategoryForm
     template_name = 'generic/generic_form.html'
+
+    breadcrumbs = 'Criação de Categoria'
 
     def form_valid(self, form):
         form.instance.user = self.request.user

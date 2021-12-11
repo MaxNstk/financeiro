@@ -12,6 +12,9 @@ class CategoryUpdateView(CustomUpdateView):
     success_url = reverse_lazy('finances:category_list')
     template_name = 'generic/generic_form.html'
 
+    breadcrumbs = 'Atualização de Categoria'
+
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         try:

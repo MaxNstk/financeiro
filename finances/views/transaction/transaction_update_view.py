@@ -12,6 +12,8 @@ class TransactionUpdateView(CustomUpdateView):
     form_class = TransactionForm
     success_url = reverse_lazy('finances:transaction_list')
 
+    breadcrumbs = 'Atualização de Transação'
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         try:

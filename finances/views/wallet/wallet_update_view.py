@@ -12,6 +12,8 @@ class WalletUpdateView(CustomUpdateView):
     form_class = Walletform
     success_url = reverse_lazy('finances:wallet_list')
 
+    breadcrumbs = 'Atualização de Carteira'
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         try:

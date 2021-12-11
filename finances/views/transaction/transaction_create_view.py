@@ -12,6 +12,8 @@ class TransactionCreateView(CustomCreateView):
     form_class = TransactionForm
     template_name = 'generic/generic_form.html'
 
+    breadcrumbs = 'Criação de Transação'
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         try:
