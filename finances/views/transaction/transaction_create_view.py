@@ -11,8 +11,12 @@ class TransactionCreateView(CustomCreateView):
     success_url = reverse_lazy('finances:transaction_list')
     form_class = TransactionForm
     template_name = 'generic/generic_form.html'
-
     breadcrumbs = 'Criação de Transação'
+
+    def get_form_kwargs(self):
+        kwargs = super(TransactionCreateView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         form.instance.user = self.request.user
