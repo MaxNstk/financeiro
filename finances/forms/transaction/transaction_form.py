@@ -5,7 +5,11 @@ from django import forms
 from django.utils.safestring import mark_safe
 
 from finances.forms.generic.custom_model_form import CustomModelForm
-from finances.models import Transaction
+from finances.models import Transaction, Wallet
+
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 
 class TransactionForm(CustomModelForm):
@@ -17,10 +21,12 @@ class TransactionForm(CustomModelForm):
     name = forms.CharField(label=mark_safe('<b> Nome </b>'), max_length=50)
     value = forms.FloatField(label=mark_safe('<b> Valor da Transação </b>'))
     description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea(), required=False)
-    date = forms.DateField(label=mark_safe('<b> Data </b>'), initial=datetime.now)
+    date = forms.DateField(label=mark_safe('<b> Data </b>'), initial=datetime.now(), widget=DateInput())
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super(TransactionForm, self).__init__(*args, **kwargs)
+        self.fields['wallet'].initial = Wallet.objects.get(user=user, main=True)
         self.fields['wallet'].label = mark_safe('<b> Carteira </b>')
         self.fields['category'].label = mark_safe('<b> Categoria </b>')
         self.fields['type'].label = mark_safe('<b> Tipo da Transação </b>')
@@ -34,7 +40,6 @@ class TransactionForm(CustomModelForm):
         if value <= 0:
             raise forms.ValidationError('Não é possível adicionar valores igual à zero ou inferiores. '
                                         'Caso necessário mude o Tipo da Transação')
-
         wallet = cl['wallet']
         current_transaction = self.cleaned_data
 
@@ -65,8 +70,8 @@ class TransactionForm(CustomModelForm):
             ),
             Div(
                 Div('value', css_class='col-lg-3'),
-                Div('wallet', css_class='col-lg-3'),
                 Div('category', css_class='col-lg-3'),
+                Div('wallet', css_class='col-lg-3'),
                 Div('date', css_class='col-lg-3'),
                 css_class='row'
             ),
