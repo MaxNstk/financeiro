@@ -4,6 +4,7 @@ from django import forms
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 
+
 class CustomModelForm(forms.ModelForm):
 
     def get_reverse_url(self):
