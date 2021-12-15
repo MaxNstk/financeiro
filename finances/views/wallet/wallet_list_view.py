@@ -6,4 +6,4 @@ class WalletListView(CustomListView):
 
     model = Wallet
     template_name = 'finances/wallet/wallet_list.html'
-    breadcrumbs = 'Criação de Carteira'
+    breadcrumbs = 'Listagem de Carteira'

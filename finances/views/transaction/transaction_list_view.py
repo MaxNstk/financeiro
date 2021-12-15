@@ -6,4 +6,4 @@ class TransactionListView(CustomListView):
 
     model = Transaction
     template_name = 'finances/transaction/transaction_list.html'
-    breadcrumbs = 'Criação de Transação'
+    breadcrumbs = 'Listagem de Transação'
