@@ -1,0 +1,18 @@
+{% extends 'generic/base.html' %}
+
+{% block content %}
+    {% block add_new %}{% endblock %}
+    <div class="card mb-4" style="margin-top: 3%">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            {% block table_name %}
+            {% endblock %}
+        </div>
+        <div class="card-body">
+            <table id="datatablesSimple">
+                {% block table %}
+                {% endblock %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
