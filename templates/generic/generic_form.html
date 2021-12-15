@@ -1,10 +1,6 @@
 {% extends 'generic/base.html' %}
 {% load crispy_forms_tags static %}
 
-{% block page-title %}
-    {{ breadcrumbs }}
-{% endblock %}
-
 {% block content %}
 
     {% csrf_token %}
