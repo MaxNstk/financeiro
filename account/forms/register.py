@@ -27,8 +27,9 @@ class RegisterForm(forms.ModelForm):
 
     def clean_username(self):
 
-        username = self.cleaned_data['username']
-        if User.objects.filter(username=username).exists():
+        username = self.cleaned_data['username'].lower()
+        user = User.objects.filter(username=username)
+        if user.count():
             raise forms.ValidationError(
             "infelizmente o usuário "+username+" ja está sendo utilizado")
         return username
@@ -36,9 +37,10 @@ class RegisterForm(forms.ModelForm):
     def clean_email(self):
 
         email = self.cleaned_data['email']
-        if User.objects.get(email=email):
+        user = User.objects.filter(email=email)
+        if user.count():
             raise forms.ValidationError(
-                "Infelizmente o email "+email+" ja está sendo utilizado")
+                    "Infelizmente o email "+email+" ja está sendo utilizado")
         return email
 
     def clean_password2(self):
