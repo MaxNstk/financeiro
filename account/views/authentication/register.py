@@ -1,3 +1,4 @@
+from django.contrib.auth.models import UserManager
 from django.urls import reverse_lazy
 
 from account.forms.register import RegisterForm
