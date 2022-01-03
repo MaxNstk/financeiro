@@ -14,7 +14,6 @@ class CategoryUpdateView(CustomUpdateView):
 
     breadcrumbs = 'Atualização de Categoria'
 
-
     def form_valid(self, form):
         form.instance.user = self.request.user
         try:
