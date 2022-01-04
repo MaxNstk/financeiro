@@ -15,7 +15,7 @@ class Walletform(CustomModelForm):
     name = forms.CharField(label=mark_safe('<b>Nome da Carteira</b>'), max_length=50)
     description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea(), required=False)
     balance = forms.FloatField(label=mark_safe('<b>Saldo inicial da carteira</b>'))
-    main = forms.BooleanField(label=mark_safe('<b> Carteira principal? </b>'))
+    main = forms.BooleanField(label=mark_safe('<b> Carteira principal? </b>'), required=False)
 
     def clean_balance(self):
         if self.cleaned_data['balance'] < 0:

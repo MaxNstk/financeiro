@@ -4,51 +4,62 @@
 
 {% block content %}
     <a href="{% url 'finances:transaction_create' %}" class="box-title btn btn-primary"> Adicionar Transação </a>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="white-box">
-                <div class="table-responsive">
-                    <table class="table text-nowrap">
-                        <thead>
-                        <tr>
+    <div class="container py-3">
+        <div class="row">
+            <div class="col-lg-12 mx-auto">
+                <div class="card-body p-2">
 
-                            <th class="border-top-0"><b>Nome</b></th>
-                            <th class="border-top-0"><b>Carteira</b></th>
-                            <th class="border-top-0"><b>Categoria</b></th>
-                            <th class="border-top-0"><b>Tipo</b></th>
-                            <th class="border-top-0"><b>Valor</b></th>
-                            <th class="border-top-0"><b>Data</b></th>
-                            <th class="border-top-0"><b>Editar</b></th>
+                    <!--  Bootstrap table-->
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr id="table-head">
 
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for object in transaction_list %}
-                            <tr>
-                                <td>{{ object.name }}</td>
-                                <td>{{ object.wallet }}</td>
-                                <td>{{ object.category }}</td>
-                                <td>
-                                    {% if object.type == 1%}
-                                        Renda
-                                    {% else %}
-                                        Despesa
-                                    {% endif %}
-                                </td>
-                                <td>{{ object.value }}</td>
-                                <td>{{ object.date }}</td>
-                                <td> <a  href="{% url 'finances:transaction_update' object.id %}" class="btn btn-primary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                    </svg> </a> </td>
+                                <th class="border-top-0"><b>Nome</b></th>
+                                <th class="border-top-0"><b>Carteira</b></th>
+                                <th class="border-top-0"><b>Categoria</b></th>
+                                <th class="border-top-0"><b>Tipo</b></th>
+                                <th class="border-top-0"><b>Valor</b></th>
+                                <th class="border-top-0"><b>Data</b></th>
+                                <th class="border-top-0"><b>Editar</b></th>
+
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            {% for object in transaction_list %}
+                                <tr>
+                                    <td>{{ object.name }}</td>
+                                    <td>{{ object.wallet }}</td>
+                                    <td>{{ object.category }}</td>
+                                    <td>
+                                        {% if object.type == 1%}
+                                            <a class="btn btn-success" style="width: 60%">Renda</a>
+                                        {% else %}
+                                            <a class="btn btn-danger" style="width: 60%">Despesa</a>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ object.value }}</td>
+                                    <td>{{ object.date }}</td>
+                                    <td> <a  href="{% url 'finances:transaction_update' object.id %}" class="btn btn-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                        </svg> </a> </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        th, td {
+            font-size: 18px;
+            text-align: center;
+        }
+    </style>
 
 {% endblock %}

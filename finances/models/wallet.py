@@ -11,7 +11,7 @@ class Wallet(BaseModel):
     description = models.TextField(max_length=500, null=True, blank=True)
     balance = models.FloatField(default=0)
     initial_balance = models.FloatField(null=True, blank=True)
-    main = models.BooleanField(default=False)
+    main = models.BooleanField(default=False, null=True, blank=True)
 
     def __str__(self):
         return self.name
