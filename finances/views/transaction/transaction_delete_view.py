@@ -1,10 +1,10 @@
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView
 
 from finances.models import Transaction
+from finances.views.generic.custom_delete_view import CustomDeleteView
 
 
-class TransactionDeleteView(DeleteView):
+class TransactionDeleteView(CustomDeleteView):
 
     model = Transaction
     template_name = 'finances/transaction/transaction_delete.html'

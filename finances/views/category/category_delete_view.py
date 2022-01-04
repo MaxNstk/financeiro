@@ -1,10 +1,10 @@
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView
 
 from finances.models import Category
+from finances.views.generic.custom_delete_view import CustomDeleteView
 
 
-class CategoryDeleteView(DeleteView):
+class CategoryDeleteView(CustomDeleteView):
 
     model = Category
     success_url = reverse_lazy('finances:category_list')
