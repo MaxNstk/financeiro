@@ -8,3 +8,6 @@ class CustomListView(ListView):
         ctx = super(CustomListView, self).get_context_data()
         ctx['breadcrumbs'] = self.breadcrumbs
         return ctx
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)

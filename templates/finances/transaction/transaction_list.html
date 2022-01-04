@@ -12,7 +12,6 @@
                         <thead>
                         <tr>
 
-                            <th class="border-top-0"><b>ID</b></th>
                             <th class="border-top-0"><b>Nome</b></th>
                             <th class="border-top-0"><b>Carteira</b></th>
                             <th class="border-top-0"><b>Categoria</b></th>
@@ -26,7 +25,6 @@
                         <tbody>
                         {% for object in transaction_list %}
                             <tr>
-                                <td>{{ object.id }}</td>
                                 <td>{{ object.name }}</td>
                                 <td>{{ object.wallet }}</td>
                                 <td>{{ object.category }}</td>

@@ -11,7 +11,6 @@
 {% block table %}
     <thead>
     <tr>
-        <th class="border-top-0"><b>ID</b></th>
         <th class="border-top-0"><b>Nome</b></th>
         <th class="border-top-0"><b>Descrição</b></th>
         <th class="border-top-0"><b>Editar</b></th>
@@ -20,7 +19,6 @@
     <tbody>
     {% for object in category_list %}
         <tr>
-            <td>{{ object.id }}</td>
             <td>{{ object.name }}</td>
             <td>{{ object.description }}</td>
             <td> <a  href="{% url 'finances:category_update' object.id %}" class="btn btn-primary">

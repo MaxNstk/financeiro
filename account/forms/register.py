@@ -12,7 +12,7 @@ class RegisterForm(UserCreationForm):
         model = User
         fields = ['first_name', 'last_name', 'username', 'phone', 'email', 'password1', 'password2']
 
-    phone = forms.CharField(max_length=20, label='Telefone', widget=forms.TextInput(attrs={'id':'phone_number'}))
+    phone = forms.CharField(max_length=20, label='Telefone', widget=forms.TextInput(attrs={'id':'phone-number'}))
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
