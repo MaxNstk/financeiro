@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 
 from finances.forms.transaction.transaction_form import TransactionForm
-from finances.models import Transaction
+from finances.models import Transaction, Wallet, Category
 from finances.views.generic.custom_create_view import CustomCreateView
 
 
@@ -24,3 +24,9 @@ class TransactionCreateView(CustomCreateView):
             return super(TransactionCreateView, self).form_valid(form)
         except Exception as e:
             return self.form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super(TransactionCreateView, self).get_context_data()
+        if Wallet.objects.filter(user=self.request.user).count() == 0:
+            ctx['hasnt_wallet'] = True
+        return ctx

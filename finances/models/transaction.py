@@ -17,7 +17,7 @@ class Transaction(BaseModel):
                     (EXPENSE, 'Despesa')]
 
     name = models.CharField(max_length=250)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, null=True, blank=True)
     wallet = models.ForeignKey('Wallet', on_delete=models.CASCADE)
     type = models.IntegerField(choices=type_CHOICES, default=2)
     value = models.FloatField()
