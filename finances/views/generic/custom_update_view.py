@@ -10,8 +10,14 @@ class CustomUpdateView(UpdateView):
         ctx['breadcrumbs'] = self.breadcrumbs
         return ctx
 
-    def get(self, request, *args, **kwargs):
-        if self.model.objects.get(id=kwargs['pk']).user != request.user:
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            if self.model.objects.get(id=kwargs['pk']).user != request.user:
+                return redirect('home')
+            else:
+                if request.method == 'GET':
+                    return super(CustomUpdateView, self).get(self, request, *args, **kwargs)
+                else:
+                    return super(CustomUpdateView, self).post(self, request, *args, **kwargs)
+        except:
             return redirect('home')
-        else:
-            return super(CustomUpdateView, self).get(self, request, *args, **kwargs)

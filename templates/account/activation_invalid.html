@@ -1,22 +1,18 @@
 {% extends 'generic/un_logged_base.html' %}
-{% load static crispy_forms_tags %}
+{% load static %}
 
 {% block title %}
-   Login - Financeiro
+   Ativação Inválida - Financeiro
 {% endblock %}
 
 {% block form-title%}
-    Login
+    Ativação Inválida
 {% endblock %}
 
 {% block content %}
-
-<div class="card-body">
-    {% csrf_token %}
-    {% crispy form %}
-    <a style="margin-top: 2%" href="{% url 'account:password_reset' %}"> Esqueci minha senha </a>
-
-</div>
+    <div class="card-body" style="text-align: center">
+        Houve um erro ao ativar sua conta, favor, contate o suporte
+    </div>
 
 {% endblock %}
 

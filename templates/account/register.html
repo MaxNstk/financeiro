@@ -13,8 +13,10 @@
 
 {% block content %}
 
-    {% csrf_token %}
-    {% crispy form %}
+    <div class="card-body">
+        {% csrf_token %}
+        {% crispy form %}
+    </div>
 
 {% endblock %}
 

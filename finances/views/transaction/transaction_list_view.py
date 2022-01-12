@@ -12,6 +12,4 @@ class TransactionListView(CustomListView):
         ctx = super(TransactionListView, self).get_context_data()
         if Wallet.objects.filter(user=self.request.user).count() == 0:
             ctx['hasnt_wallet'] = True
-        if Category.objects.filter(user=self.request.user).count() == 0:
-            ctx['hasnt_category'] = True
         return ctx

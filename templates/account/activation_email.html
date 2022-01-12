@@ -1,0 +1,6 @@
+{% autoescape off %}
+Olá,
+Sua conta foi Criada com sucesso! Clique no link abaixo para ativa-la!
+
+http://{{ domain }}{% url 'account:activate' uidb64=uid token=token %}
+{% endautoescape %}

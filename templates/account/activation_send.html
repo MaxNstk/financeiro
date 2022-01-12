@@ -1,0 +1,22 @@
+{% extends 'generic/un_logged_base.html' %}
+{% load static %}
+
+{% block title %}
+   Ativação - Financeiro
+{% endblock %}
+
+{% block form-title%}
+    Ativação de Conta
+{% endblock %}
+
+{% block content %}
+
+    <div class="card-body" style="text-align: center">
+        Conta criada! Ative sua conta com o email que enviamos para você!
+    </div>
+
+{% endblock %}
+
+{% block form-footer %}
+    <a href="{% url 'account:login' %}">Ja tem uma conta? Faça o login!</a>
+{% endblock %}
