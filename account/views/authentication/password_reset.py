@@ -6,6 +6,7 @@ from account.forms.password_reset import CustomPasswordResetForm
 
 class CustomPasswordResetView(PasswordResetView):
 
+    email_template_name = 'account/password_reset_email.html'
     template_name = 'account/password_reset.html'
     form_class = CustomPasswordResetForm
     success_url = reverse_lazy('account:password_reset_done')
