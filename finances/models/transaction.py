@@ -17,7 +17,7 @@ class Transaction(BaseModel):
     type = models.IntegerField(choices=type_CHOICES, default=2)
     value = models.FloatField()
     description = models.TextField(max_length=255, null=True, blank=True)
-    date = models.DateField(default=datetime.now)
+    date = models.DateField(default=datetime.now())
 
     def __str__(self):
         return self.name

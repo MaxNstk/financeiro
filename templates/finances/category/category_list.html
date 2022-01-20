@@ -15,8 +15,15 @@
 
 {% block tbody %}
 
-    <td>{{ object.name }}</td>
-    <td>{{ object.description }}</td>
+    <td>
+        <a class="btn btn" style="width: 60%; background-color:lightgrey; color: black; border: 3px solid {{object.color}};">
+            {{ object.name }}</a></td>
+    <td> {% if not object.description %}
+        ------------------------------------
+    {% else %}
+        {{ object.description }}
+    {% endif %}
+    </td>
     {% if object %}
         <td> <a  href="{% url 'finances:category_update' object.id %}" class="btn btn-primary">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
