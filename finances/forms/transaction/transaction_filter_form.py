@@ -1,5 +1,5 @@
 from crispy_forms.layout import Layout, Div, Field
-from django.forms import DateInput, ModelChoiceField, ChoiceField, FloatField, DateField
+from django.forms import ChoiceField, FloatField, DateField
 
 from finances.forms.generic.custom_model_form import CustomModelForm
 from finances.models import Category, Transaction
@@ -20,12 +20,12 @@ class TransactionFilterForm(CustomModelForm):
     type = ChoiceField(choices=[('1', 'Renda'), ('2', 'Despesa')], label= 'Tipo')
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user',None)
+        user = kwargs.pop('user', None)
         super(TransactionFilterForm, self).__init__(*args, **kwargs)
-        self.fields['category'].queryset = Category.objects.filter(user=user)
-        self.fields['category'].label = 'Categoria'
         for field in self.fields.values():
             field.required = False
+        self.fields['category'].queryset = Category.objects.filter(user=user)
+        self.fields['category'].label = 'Categoria'
         self.helper.form_method = 'get'
 
     def build_layout(self):

@@ -37,10 +37,20 @@ class DashboardView(FormView):
                     updated_queryset.remove(obj)
         return queryset
 
+    def filter_category(self, queryset):
+        category = self.filters.get('category', None)
+        updated_queryset = queryset
+        if category:
+            for obj in queryset:
+                if obj.category != category:
+                    updated_queryset.remove(obj)
+        return queryset
+
     def get_context_data(self, **kwargs):
         queryset = Transaction.objects.filter(user=self.request.user)
         queryset = [ obj for obj in queryset]
         queryset = self.filter_date(queryset)
+        queryset = self.filter_category(queryset)
 
         ctx = super(DashboardView, self).get_context_data()
         ctx['filter_form'] = self.form_class
