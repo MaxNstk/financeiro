@@ -1,31 +1,34 @@
-from crispy_forms.layout import Layout, Div, Field
-from django.forms import ChoiceField, FloatField, DateField
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Div, Field, Submit, Button, ButtonHolder
+from django.forms import ChoiceField, FloatField, DateField, ModelForm
+from django.urls import reverse_lazy
 
-from finances.forms.generic.custom_model_form import CustomModelForm
 from finances.models import Category, Transaction
 from finances.forms.transaction.transaction_form import DateInput
 
 
-class TransactionFilterForm(CustomModelForm):
+class TransactionFilterForm(ModelForm):
 
     class Meta:
         model = Transaction
         fields = ['category', 'type']
 
-    initial_date = DateField(label='Data inicial', widget=DateInput())
-    final_date = DateField(label='Data final', widget=DateInput())
-
-    value__gte = FloatField(label='Valores maiores que')
-    value__lte = FloatField(label='Valores menores que')
+    initial_date = DateField(label='Datas posteriores à:', widget=DateInput())
+    final_date = DateField(label='Datas anteriores à:', widget=DateInput())
+    value_lte = FloatField(label='Valores menores que:')
+    value_gte = FloatField(label='Valores maiores que:')
     type = ChoiceField(choices=[('1', 'Renda'), ('2', 'Despesa')], label= 'Tipo')
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
+        self.base_fields['category'].queryset = Category.objects.filter(user=user)
+        self.base_fields['category'].label = 'Categoria'
+        self.base_fields['type'].initial = '2'
         super(TransactionFilterForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = self.build_layout()
         for field in self.fields.values():
             field.required = False
-        self.fields['category'].queryset = Category.objects.filter(user=user)
-        self.fields['category'].label = 'Categoria'
         self.helper.form_method = 'get'
 
     def build_layout(self):
@@ -33,13 +36,19 @@ class TransactionFilterForm(CustomModelForm):
             Div(
                 Div(Field('initial_date'), css_class='col-lg-3'),
                 Div(Field('final_date'), css_class='col-lg-3'),
-                Div(Field('value__gte'), css_class='col-lg-3'),
-                Div(Field('value__lte'), css_class='col-lg-3'),
+                Div(Field('value_lte'), css_class='col-lg-3'),
+                Div(Field('value_gte'), css_class='col-lg-3'),
                 css_class='row'
             ),
             Div(
                 Div(Field('category'), css_class='col-lg-6'),
                 Div(Field('type'), css_class='col-lg-6'),
                 css_class='row'
+            ),
+            ButtonHolder(
+                Submit('submit', 'Filtrar', css_class='btn btn-primary',),
+                Button('cancel', 'Remover Filtros', css_class='btn-primary',
+                       onclick=f"window.location.href = '{reverse_lazy('charts:dashboard')}'"),
             )
+
         )
