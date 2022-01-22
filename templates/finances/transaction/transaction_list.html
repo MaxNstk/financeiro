@@ -10,7 +10,6 @@
 
 {% block thead %}
 
-    <th class="border-top-0"><b>Nome</b></th>
     <th class="border-top-0"><b>Categoria</b></th>
     <th class="border-top-0"><b>Tipo</b></th>
     <th class="border-top-0"><b>Valor</b></th>
@@ -20,8 +19,6 @@
 {% endblock %}
 
 {% block tbody %}
-    <td>{{ object.name }}</td>
-
     <td>
         {% if not object.category %}
             -------------

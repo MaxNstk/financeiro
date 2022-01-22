@@ -13,8 +13,8 @@ class TransactionFilterForm(ModelForm):
         model = Transaction
         fields = ['category', 'type']
 
-    initial_date = DateField(label='Datas posteriores à:', widget=DateInput())
-    final_date = DateField(label='Datas anteriores à:', widget=DateInput())
+    initial_date = DateField(label='Datas iguais e posteriores à:', widget=DateInput())
+    final_date = DateField(label='Datas iguais e anteriores à:', widget=DateInput())
     value_lte = FloatField(label='Valores menores que:')
     value_gte = FloatField(label='Valores maiores que:')
     type = ChoiceField(choices=[('1', 'Renda'), ('2', 'Despesa')], label= 'Tipo')
@@ -38,17 +38,17 @@ class TransactionFilterForm(ModelForm):
                 Div(Field('final_date'), css_class='col-lg-3'),
                 Div(Field('value_lte'), css_class='col-lg-3'),
                 Div(Field('value_gte'), css_class='col-lg-3'),
-                css_class='row'
+                css_class='row', style='margin-bottom: 1%;'
             ),
             Div(
                 Div(Field('category'), css_class='col-lg-6'),
                 Div(Field('type'), css_class='col-lg-6'),
-                css_class='row'
+                css_class='row', style='margin-bottom: 1%;'
             ),
             ButtonHolder(
                 Submit('submit', 'Filtrar', css_class='btn btn-primary',),
                 Button('cancel', 'Remover Filtros', css_class='btn-primary',
                        onclick=f"window.location.href = '{reverse_lazy('charts:dashboard')}'"),
-            )
+            ),
 
         )

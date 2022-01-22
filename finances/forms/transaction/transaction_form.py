@@ -27,7 +27,6 @@ class TransactionForm(CustomModelForm):
         self.fields['category'].queryset = Category.objects.filter(user=self.user)
         self.fields['type'].label = mark_safe('<b> Tipo da Transação </b>')
 
-    name = forms.CharField(label=mark_safe('<b> Nome </b>'), max_length=50)
     value = forms.FloatField(label=mark_safe('<b> Valor da Transação </b>'))
     description = forms.CharField(label='Descrição', max_length=500, widget=forms.Textarea(), required=False)
     date = forms.DateField(label=mark_safe('<b> Data </b>'), initial=datetime.now().strftime('%Y-%m-%d'), widget=DateInput())
@@ -47,14 +46,10 @@ class TransactionForm(CustomModelForm):
     def build_layout(self):
         return Layout(
             Div(
-                Div('name', css_class='col-lg-8'),
-                Div('category', css_class='col-lg-4'),
-                css_class='row'
-            ),
-            Div(
-                Div('type', css_class='col-lg-4'),
-                Div('value', css_class='col-lg-4'),
-                Div('date', css_class='col-lg-4'),
+                Div('category', css_class='col-lg-3'),
+                Div('type', css_class='col-lg-3'),
+                Div('value', css_class='col-lg-3'),
+                Div('date', css_class='col-lg-3'),
                 css_class='row'
             ),
             Div(

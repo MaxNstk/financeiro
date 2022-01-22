@@ -1,8 +1,5 @@
 import json
 
-from django.views.generic import FormView
-
-from finances.forms.transaction.transaction_filter_form import TransactionFilterForm
 from finances.models import Transaction, Category
 from finances.views.transaction.transaction_filter_view import TransactionFilterView
 
@@ -15,27 +12,33 @@ class DashboardView(TransactionFilterView):
             queryset = self.filter_date(queryset)
             queryset = self.filter_category(queryset)
             queryset = self.filter_value(queryset)
+            queryset = self.filter_type(queryset)
         ctx = super(DashboardView, self).get_context_data()
 
-        names = [obj.name for obj in queryset]
         categories = []
+        total_value = 0
+        percentage_value = {}
+
         for obj in queryset:
-            if obj.category:
-                categories.append({obj.category.name : obj.category.color})
-            else:
-                uncategorized = Category.objects.get(name='uncategorized')
-                categories.append({uncategorized.name: uncategorized.color})
+            total_value += obj.value
+            percentage_value[obj.category.name] = 0
 
-        types = [int(obj.type) for obj in queryset]
-        values = [float(obj.value) for obj in queryset]
-        date = [obj.date for obj in queryset]
+        for obj in queryset:
+            percentage_value[obj.category.name] += obj.value
 
-        ctx['breadcrumbs'] = 'DashboardView'
+        for key, value in percentage_value.items():
+            percentage_value[key] = {'percentage':round((value/total_value*100), 2),
+                                     'value': value}
+            categories.append(key)
+
+        values = [float(v['value']) for k, v in percentage_value.items()]
+
+
+        ctx['total_value'] = total_value
+        ctx['percentage_value'] = percentage_value
+
         ctx['queryset'] = {
-            'names': json.dumps(names),
             'categories': json.dumps(categories),
-            'types': json.dumps(types),
             'values': json.dumps(values),
-            # 'dates': json.dumps(date),
         }
         return ctx

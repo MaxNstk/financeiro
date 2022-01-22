@@ -1,7 +1,6 @@
 from django.views.generic import FormView
 
 from finances.forms.transaction.transaction_filter_form import TransactionFilterForm
-from finances.models import Transaction
 
 
 class TransactionFilterView(FormView):
@@ -62,4 +61,9 @@ class TransactionFilterView(FormView):
         if value_gte:
             queryset = queryset.exclude(value__lt=value_gte)
 
+        return queryset
+
+    def filter_type(self, queryset):
+        type = self.filters.get('type', None)
+        queryset = queryset.filter(type=type)
         return queryset

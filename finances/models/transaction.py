@@ -12,7 +12,6 @@ class Transaction(BaseModel):
     type_CHOICES = [(CREDIT, 'Renda'),
                     (EXPENSE, 'Despesa')]
 
-    name = models.CharField(max_length=250)
     category = models.ForeignKey('Category', on_delete=models.CASCADE, null=True, blank=True)
     type = models.IntegerField(choices=type_CHOICES, default=2)
     value = models.FloatField()
@@ -20,4 +19,4 @@ class Transaction(BaseModel):
     date = models.DateField(default=datetime.now())
 
     def __str__(self):
-        return self.name
+        return self.description
