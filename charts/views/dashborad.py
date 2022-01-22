@@ -1,12 +1,18 @@
 import json
 
+from finances.forms.transaction.transaction_filter_form import TransactionFilterForm
 from finances.models import Transaction, Category
 from finances.views.transaction.transaction_filter_view import TransactionFilterView
 
 
 class DashboardView(TransactionFilterView):
 
+    form_class = TransactionFilterForm
+    template_name = 'generic/dashboard.html'
+
     def get_context_data(self, **kwargs):
+
+        # get the queryset and filters it
         queryset = Transaction.objects.filter(user=self.request.user)
         if self.filters:
             queryset = self.filter_date(queryset)
@@ -15,30 +21,71 @@ class DashboardView(TransactionFilterView):
             queryset = self.filter_type(queryset)
         ctx = super(DashboardView, self).get_context_data()
 
+        # get the total value from all the transactions in the queryset
+        ctx['total_value'] = 0
+        for obj in queryset:
+            ctx['total_value'] += obj.value
+
+        # get all the categories of the queryset
         categories = []
-        total_value = 0
-        percentage_value = {}
-
         for obj in queryset:
-            total_value += obj.value
-            percentage_value[obj.category.name] = 0
+            categories.append(obj.category)
+        qs_categories = set(categories)
 
-        for obj in queryset:
-            percentage_value[obj.category.name] += obj.value
+        # takes the queryset and the categories above and returns a list for each category
+        # containing the name, the total_value of the transactions of the respective category
+        # and the percentage of it
+        categories = []
+        for category in qs_categories:
+            value = 0
+            for obj in queryset:
+                if category == obj.category:
+                    value += obj.value
 
-        for key, value in percentage_value.items():
-            percentage_value[key] = {'percentage':round((value/total_value*100), 2),
-                                     'value': value}
-            categories.append(key)
+            categories.append({ 'name': category.name,
+                                'value': value,
+                                'percentage': round((value/ctx['total_value']*100),2)
+                                })
 
-        values = [float(v['value']) for k, v in percentage_value.items()]
+        categories_names = []
+        categories_values = []
+        categories_percentages = []
 
+        for category in categories:
+            for k,v in category.items():
+                if k == 'name':
+                    categories_names.append(v)
+                if k == 'value':
+                    categories_values.append(v)
+                if k == 'percentage':
+                    categories_percentages.append(v)
 
-        ctx['total_value'] = total_value
-        ctx['percentage_value'] = percentage_value
-
-        ctx['queryset'] = {
-            'categories': json.dumps(categories),
-            'values': json.dumps(values),
-        }
+        ctx['categories'] = categories
+        ctx['categories_names'] = json.dumps(categories_names)
+        ctx['categories_values'] = json.dumps(categories_values)
+        ctx['categories_percentages'] = json.dumps(categories_percentages)
         return ctx
+
+        # Getting the value of all transactions of each category
+
+        # total_value = 0
+        # percentage_value = {}
+        #
+        # for obj in queryset:
+        #     total_value += obj.value
+        #     percentage_value[obj.category.name] = 0
+        #
+        # for obj in queryset:
+        #     percentage_value[obj.category.name] += obj.value
+        #
+        # for key, value in percentage_value.items():
+        #     percentage_value[key] = {'percentage':round((value/total_value*100), 2),
+        #                              'value': value}
+        #     categories.append(key)
+        #
+        # values = [float(v['value']) for k, v in percentage_value.items()]
+
+
+        # ctx['total_value'] = total_value
+        # ctx['percentage_value'] = percentage_value
+

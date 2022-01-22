@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block chart1_title %}
-    Gráfico de Valores por Transação
+    Gráficos de Valores por Categoria
 {% endblock %}
 
 {% block chart1 %}
@@ -31,10 +31,10 @@
         </tr>
         </thead>
         <tbody>
-        {% for k,v in percentage_value.items %}
+        {% for category in categories %}
             <tr>
                 <td>
-                    {{ k.title }} : {{ v.percentage }}%  ----  R${{ v.value }}
+                    {{category.name.title }} : {{ category.percentage }}%  ----  R${{ category.value }}
                 </td>
             </tr>
         {% endfor %}
@@ -63,10 +63,9 @@
             <script>
 
                 var ctx = document.getElementById('transactionsChart');
-                var categories = JSON.parse('{{ queryset.categories|safe }}');
-                var types = JSON.parse('{{ queryset.types|safe }}');
-                var values = JSON.parse('{{ queryset.values|safe }}');
-                {#var dates = JSON.parse('{{ queryset.dates|safe }}');#}
+                var categories_names = JSON.parse('{{ categories_names|safe }}');
+                var categories_values = JSON.parse('{{ categories_values|safe }}');
+                var categories_percentages = JSON.parse('{{ categories_percentages|safe }}');
 
 
                 {#var transactionsChart = new Chart(ctx, {#}
@@ -110,10 +109,10 @@
                 var transactionsChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
-                        labels: categories,
+                        labels: categories_names,
                         datasets: [{
                             label: 'Pizza',
-                            data: values,
+                            data: categories_values,
                             backgroundColor: [
                                 'rgb(255, 99, 132)',
                                 'rgb(54, 162, 235)',

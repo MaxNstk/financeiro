@@ -1,12 +1,8 @@
 from django.views.generic import FormView
 
-from finances.forms.transaction.transaction_filter_form import TransactionFilterForm
-
 
 class TransactionFilterView(FormView):
 
-    form_class = TransactionFilterForm
-    template_name = 'generic/dashboard.html'
     filters = {}
 
     def get(self, request, *args, **kwargs):
