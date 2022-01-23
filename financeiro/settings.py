@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'account',
     'crispy_forms',
     'colorfield',
-    'django_filters'
 ]
 
 

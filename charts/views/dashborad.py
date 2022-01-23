@@ -2,8 +2,9 @@ import json
 
 from django.views.generic import FormView
 
+from finances.forms.transaction.transaction_category_filter_form import TransactionCategoryFilterForm
 from finances.forms.transaction.transaction_filter_form import TransactionFilterForm
-from finances.models import Transaction
+from finances.models import Transaction, Category
 from finances.views.transaction.transaction_filter_view import TransactionFilterView
 
 
@@ -13,7 +14,12 @@ class DashboardView(TransactionFilterView, FormView):
     template_name = 'generic/dashboard.html'
 
     def get_context_data(self, **kwargs):
+        ctx = super(DashboardView, self).get_context_data()
+        TransactionCategoryFilterForm.base_fields['cat_category'].queryset = Category.objects.filter(user=self.request.user)
+        # todo fazer metodo para trazer a categoria com mais transações
+        TransactionCategoryFilterForm.base_fields['cat_category'].initial = Category.objects.get(user=self.request.user, name='Mercado')
 
+        ctx['category_filter_form'] = TransactionCategoryFilterForm
         # get the queryset and filters it
         queryset = Transaction.objects.filter(user=self.request.user)
         if self.filters:
@@ -21,7 +27,6 @@ class DashboardView(TransactionFilterView, FormView):
             queryset = self.filter_category(queryset)
             queryset = self.filter_value(queryset)
             queryset = self.filter_type(queryset)
-        ctx = super(DashboardView, self).get_context_data()
 
         # get the total value from all the transactions in the queryset
         ctx['total_value'] = 0

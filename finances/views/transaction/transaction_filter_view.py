@@ -1,3 +1,4 @@
+import datetime
 
 
 class TransactionFilterView:
@@ -9,6 +10,10 @@ class TransactionFilterView:
         if 'csrfmiddlewaretoken' in self.filters:
             self.filters.pop('csrfmiddlewaretoken')
         self.get_initial()
+        if not self.filters.get('initial_date', None):
+            self.filters['initial_date'] = (datetime.datetime.now() - datetime.timedelta(30)).strftime('%Y-%m-%d')
+        if not self.filters.get('type', None):
+            self.filters['type'] = '2'
         return super(TransactionFilterView, self).get(request, *args, **kwargs)
 
     def get_form_kwargs(self):

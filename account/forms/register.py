@@ -18,7 +18,7 @@ class RegisterForm(UserCreationForm):
         super(RegisterForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = self.build_layout()
-        self.helper.add_input(Submit('submit', 'Salvar'),)
+        self.helper.add_input(Submit('submit', 'Salvar', css_class='btn btn-success'))
 
     def clean_email(self):
         email = self.cleaned_data['email']

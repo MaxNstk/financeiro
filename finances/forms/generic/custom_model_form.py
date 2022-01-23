@@ -24,11 +24,11 @@ class CustomModelForm(forms.ModelForm):
         super(CustomModelForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = self.build_layout()
-        self.helper.add_input(Submit('submit', 'Salvar'))
+        self.helper.add_input(Submit('submit', 'Salvar', css_class='btn btn-success'))
         if self.instance.id:
             self.helper.add_input(Button('delete', 'Deletar', css_class='btn-danger',
                                   onclick=f"window.location.href = '{self.get_delete_url()}'"))
-        self.helper.add_input(Button('cancel', 'Cancelar', css_class='btn-primary',
+        self.helper.add_input(Button('cancel', 'Cancelar', css_class='btn-warning',
                                      onclick=f"window.location.href = '{self.get_reverse_url()}'"))
 
     def build_layout(self):
