@@ -14,6 +14,7 @@ from finances.views.generic.custom_create_view import CustomCreateView
 
 
 class RegisterView(CustomCreateView):
+
     model = User
     form_class = RegisterForm
     success_url = reverse_lazy('account:login')

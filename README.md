@@ -1,2 +1,2 @@
 financeiro
-    tema: Dashboard - SB Admin
+    tema: DashboardView - SB Admin

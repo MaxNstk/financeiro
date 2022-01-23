@@ -1,0 +1,130 @@
+{% extends 'generic/charts.html' %}
+{% load crispy_forms_tags %}
+
+{% block page-title %} Dashboard {% endblock %}
+
+{% block pre_charts  %}
+    {% crispy form %}
+{% endblock %}
+
+{% block chart1_title %}
+    Gráficos de Valores por Categoria
+{% endblock %}
+
+{% block chart1 %}
+    <canvas id="transactionsChart" width="50%" height="50%"> </canvas>
+{% endblock %}
+
+{% block chart2_title %}
+    Relatório parcial
+{% endblock %}
+
+{% block chart2 %}
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            <td>
+                <b>Valor Total: R${{ total_value }}</b>
+            </td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>
+                    {{category.name.title }} : {{ category.percentage }}%  ----  R${{ category.value }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock chart2 %}
+
+        {% block scripts %}
+
+            {#    <script defer>#}
+            {#        $('#category_select').select2({#}
+            {#            width:'100%',#}
+            {#            ajax:{#}
+            {#                url:'{% url 'charts:fetch_categories' %}',#}
+            {#                dataType: 'json'#}
+            {#            }#}
+            {#        })#}
+            {#        $('#category_select').on('select2:select', function (e) {#}
+            {#            debugger#}
+            {#            names = e.params.data.names#}
+            {#            console.log(data);#}
+            {#        });#}
+            {#    </script>#}
+
+            <script>
+
+                var ctx = document.getElementById('transactionsChart');
+                var categories_names = JSON.parse('{{ categories_names|safe }}');
+                var categories_values = JSON.parse('{{ categories_values|safe }}');
+                var categories_percentages = JSON.parse('{{ categories_percentages|safe }}');
+
+
+                {#var transactionsChart = new Chart(ctx, {#}
+                {#    type: 'line',#}
+                {#    data: {#}
+                {#        labels : names,#}
+                {#        datasets: [{#}
+                {#            label: 'Transações',#}
+                {#            data: values,#}
+                {#            backgroundColor: [#}
+                {#                'rgba(255, 99, 132, 0.2)',#}
+                {#                'rgba(54, 162, 235, 0.2)',#}
+                {#                'rgba(255, 206, 86, 0.2)',#}
+                {#                'rgba(75, 192, 192, 0.2)',#}
+                {#                'rgba(153, 102, 255, 0.2)',#}
+                {#                'rgba(255, 159, 64, 0.2)'#}
+                {#            ],#}
+                {#            borderColor: [#}
+                {#                'rgba(255,99,132,1)',#}
+                {#                'rgba(54, 162, 235, 1)',#}
+                {#                'rgba(255, 206, 86, 1)',#}
+                {#                'rgba(75, 192, 192, 1)',#}
+                {#                'rgba(153, 102, 255, 1)',#}
+                {#                'rgba(255, 159, 64, 1)'#}
+                {#            ],#}
+                {#            borderWidth: 1#}
+                {#        }]#}
+                {#    },#}
+                {#    options: {#}
+                {#        scales: {#}
+                {#            yAxes: [{#}
+                {#                ticks: {#}
+                {#                    beginAtZero:true#}
+                {#                }#}
+                {#            }]#}
+                {#        }#}
+                {#    }#}
+                {##}
+                {# }); #}
+
+                var transactionsChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: categories_names,
+                        datasets: [{
+                            label: 'Pizza',
+                            data: categories_values,
+                            backgroundColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(54, 162, 235)',
+                                'rgb(255, 205, 86)'
+                            ],
+                            hoverOffset: 4
+                        }]
+                    },
+                });
+
+
+
+            </script>
+
+        {% endblock %}
