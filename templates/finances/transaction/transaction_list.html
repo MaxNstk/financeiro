@@ -1,11 +1,11 @@
 {% extends 'generic/list_table.html' %}
 {% load static crispy_forms_tags %}
 
-{% block page-title %} Transações {% endblock %}
-
 
 {% block add_new %}
-    <a href="{% url 'finances:transaction_create' %}" class="box-title btn btn-primary"> Adicionar Transação </a>
+    <a href="{% url 'finances:transaction_create' %}" class="box-title btn btn-success" style="margin-bottom: 2%"> Adicionar Transação </a>
+
+    {% crispy form %}
 {% endblock %}
 
 {% block thead %}

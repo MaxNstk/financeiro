@@ -1,7 +1,6 @@
-from django.views.generic import FormView
 
 
-class TransactionFilterView(FormView):
+class TransactionFilterView:
 
     filters = {}
 
@@ -9,6 +8,7 @@ class TransactionFilterView(FormView):
         self.filters = dict(map(lambda k: (k, request.GET[k]), request.GET))
         if 'csrfmiddlewaretoken' in self.filters:
             self.filters.pop('csrfmiddlewaretoken')
+        self.get_initial()
         return super(TransactionFilterView, self).get(request, *args, **kwargs)
 
     def get_form_kwargs(self):
@@ -17,7 +17,6 @@ class TransactionFilterView(FormView):
         return kwargs
 
     def get_initial(self):
-
         # cleaning filters
         for field in self.form_class.base_fields.items():
             field[1].initial = None

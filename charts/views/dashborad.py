@@ -1,11 +1,13 @@
 import json
 
+from django.views.generic import FormView
+
 from finances.forms.transaction.transaction_filter_form import TransactionFilterForm
-from finances.models import Transaction, Category
+from finances.models import Transaction
 from finances.views.transaction.transaction_filter_view import TransactionFilterView
 
 
-class DashboardView(TransactionFilterView):
+class DashboardView(TransactionFilterView, FormView):
 
     form_class = TransactionFilterForm
     template_name = 'generic/dashboard.html'
@@ -65,27 +67,3 @@ class DashboardView(TransactionFilterView):
         ctx['categories_values'] = json.dumps(categories_values)
         ctx['categories_percentages'] = json.dumps(categories_percentages)
         return ctx
-
-        # Getting the value of all transactions of each category
-
-        # total_value = 0
-        # percentage_value = {}
-        #
-        # for obj in queryset:
-        #     total_value += obj.value
-        #     percentage_value[obj.category.name] = 0
-        #
-        # for obj in queryset:
-        #     percentage_value[obj.category.name] += obj.value
-        #
-        # for key, value in percentage_value.items():
-        #     percentage_value[key] = {'percentage':round((value/total_value*100), 2),
-        #                              'value': value}
-        #     categories.append(key)
-        #
-        # values = [float(v['value']) for k, v in percentage_value.items()]
-
-
-        # ctx['total_value'] = total_value
-        # ctx['percentage_value'] = percentage_value
-
