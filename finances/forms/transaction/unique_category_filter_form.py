@@ -5,12 +5,10 @@ from django.urls import reverse_lazy
 
 from finances.forms.transaction.transaction_form import DateInput
 
-
 # Form that filters categories based on the transactions
-from finances.models import Category
 
 
-class TransactionCategoryFilterForm(Form):
+class UniqueCategoryFilterForm(Form):
 
     cat_initial_date = DateField(label='Datas iguais e posteriores à:', widget=DateInput())
     cat_final_date = DateField(label='Datas iguais e anteriores à:', widget=DateInput())
@@ -21,7 +19,7 @@ class TransactionCategoryFilterForm(Form):
 
     def __init__(self, *args, **kwargs):
         self.base_fields['cat_type'].initial = '2'
-        super(TransactionCategoryFilterForm, self).__init__(*args, **kwargs)
+        super(UniqueCategoryFilterForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = self.build_layout()
         for field in self.fields.values():

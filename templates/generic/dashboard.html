@@ -4,9 +4,8 @@
 {% block page-title %} Dashboard {% endblock %}
 
 {% block pre_charts  %}
-    {% crispy form %}
+    {% crispy multi_categories_form %}
 {% endblock %}
-
 
 {% block chart1 %}
     <div class="card-header">
@@ -14,7 +13,7 @@
         Gráficos de Valores por Categoria
     </div>
     <div class="card-body">
-        <canvas id="transactionsChart" width="50%" height="50%"> </canvas>
+        <canvas id="multiCategoriesChart" width="50%" height="50%"> </canvas>
     </div>
 {% endblock %}
 
@@ -49,7 +48,7 @@
 {% endblock chart2 %}
 
 {% block pre_charts2 %}
-            {% crispy category_filter_form %}
+    {% crispy unique_category_form %}
 {% endblock %}
 
 {% block chart3 %}
@@ -64,85 +63,107 @@
 
 {% block scripts %}
 
-     <script>
+    {# Filters the multi categories chart #}
+    <script>
 
-        var ctx = document.getElementById('transactionsChart');
-        var categories_names = JSON.parse('{{ categories_names|safe }}');
-        var categories_values = JSON.parse('{{ categories_values|safe }}');
-        var categories_percentages = JSON.parse('{{ categories_percentages|safe }}');
+        $("#multi_categories_submit").click(function (){
+            let filterParams = {
+                categories : $("#id_category").val(),
+                initialDate : $("#id_initial_date").val(),
+                finalDate : $("#id_final_date").val(),
+                valueLte : $("#id_value_lte").val(),
+                valueGte : $("#id_value_gte").val(),
+                type : $("#id_type").val(),
+            };
+            $.ajax({
+                url : '{% url 'charts:filter_multi_categories' %}',
+                method: 'get',
+                data: filterParams,
+                success: (response) => {
+                    var chart = document.getElementById('multiCategoriesChart');
+                    var names = response.names;
+                    var values = response.values;
+                    var percentages = response.percentages;
+                    debugger
+                    var multiCategoriesChart = new Chart(chart, {
+                        type: 'pie',
+                        data: {
+                            labels: names,
+                            datasets: [{
+                                label: 'Pizza',
+                                data: values,
+                                backgroundColor: [
+                                    'rgb(255, 99, 132)',
+                                    'rgb(54, 162, 235)',
+                                    'rgb(255, 205, 86)'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        },
+                    });
+                    console.log('deu boa')
+                },
+                error: function(){
+                    console.log('não deu boa')
+                }
+            })
 
-        var transactionsChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: categories_names,
-                datasets: [{
-                    label: 'Pizza',
-                    data: categories_values,
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)'
-                    ],
-                    hoverOffset: 4
-                }]
-            },
         });
+
     </script>
 
 
     <script>
-    $("#category_filter_submit").click(function (){
-        let filterParams = {
-            category : $("#id_cat_category").val(),
-            initialDate : $("#id_cat_initial_date").val(),
-            finalDate : $("#id_cat_final_date").val(),
-            valueLte : $("#id_cat_value_lte").val(),
-            valueGte : $("#id_cat_value_gte").val(),
-            type : $("#id_cat_type").val(),
-        };
-        $.ajax({
-            url : '{% url 'charts:filter_categoriees' %}',
-            method: 'get',
-            data: filterParams,
-            success: (response) => {
-                var chart = document.getElementById('categoriesChart')
+        $("#category_filter_submit").click(function (){
+            let filterParams = {
+                category : $("#id_cat_category").val(),
+                initialDate : $("#id_cat_initial_date").val(),
+                finalDate : $("#id_cat_final_date").val(),
+                valueLte : $("#id_cat_value_lte").val(),
+                valueGte : $("#id_cat_value_gte").val(),
+                type : $("#id_cat_type").val(),
+            };
+            $.ajax({
+                url : '{% url 'charts:filter_unique_category' %}',
+                method: 'get',
+                data: filterParams,
+                success: (response) => {
+                    var chart = document.getElementById('categoriesChart')
 
-                var category = response.category;
-                var values = response.values;
-                var dates = response.dates;
+                    var category = response.category;
+                    var values = response.values;
+                    var dates = response.dates;
+                    document.getElementById('chart3-title').innerHTML= 'Grafico de gastos em: '+category
+                    var categoriesChart = new Chart(chart, {
+                        type: 'pie',
+                        data: {
+                            labels: dates,
+                            datasets: [{
+                                label: 'Pizza',
+                                data: values,
+                                backgroundColor: [
+                                    'rgb(255, 99, 132)',
+                                    'rgb(54, 162, 235)',
+                                    'rgb(255, 205, 86)'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        },
+                    });
 
-                document.getElementById('chart3-title').innerHTML= 'Grafico de gastos em: '+category
-                var categoriesChart = new Chart(chart, {
-            type: 'pie',
-            data: {
-                labels: dates,
-                datasets: [{
-                    label: 'Pizza',
-                    data: values,
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)'
-                    ],
-                    hoverOffset: 4
-                }]
-            },
+                    console.log('deu boa')
+                },
+                error: function(){
+                    console.log('não deu boa')
+                }
+            })
+
         });
-
-                console.log('deu boa')
-            },
-            error: function(){
-                console.log('não deu boa')
-            }
-        })
-
-    });
     </script>
 
-    <script>
+    <script defer>
         $('#id_category').select2({
             placeholder: 'Selecione uma ou mais Categorias'
         })
-
     </script>
 {% endblock %}
