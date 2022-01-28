@@ -24,22 +24,16 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table">
+            <table class="table" id="table1">
                 <thead>
                 <tr>
                     <td>
-                        <b>Valor Total: R${{ total_value }}</b>
+                        <b> Teste </b>
                     </td>
                 </tr>
                 </thead>
-                <tbody>
-                {% for category in categories %}
-                    <tr>
-                        <td>
-                            {{category.name.title }} : {{ category.percentage }}%  ----  R${{ category.value }}
-                        </td>
-                    </tr>
-                {% endfor %}
+                <tbody id="tbody1">
+
                 </tbody>
             </table>
 
@@ -64,17 +58,18 @@
 {% block scripts %}
 
     {# Filters the multi categories chart #}
-    <script>
 
-        $("#multi_categories_submit").click(function (){
-            let filterParams = {
-                categories : $("#id_category").val(),
-                initialDate : $("#id_initial_date").val(),
-                finalDate : $("#id_final_date").val(),
-                valueLte : $("#id_value_lte").val(),
-                valueGte : $("#id_value_gte").val(),
-                type : $("#id_type").val(),
-            };
+    {# initial chart, filtered by -30 days #}
+    <script defer>
+        document.getElementById('id_initial_date').value='{{standard_filter_date}}'
+        filterMultiCategoriesForm()
+
+        $("#multi_categories_submit").click( ()=> {
+            filterMultiCategoriesForm()
+        });
+
+            function filterMultiCategoriesForm(){
+            let filterParams = $('#multi-categories-form').serializeArray()
             $.ajax({
                 url : '{% url 'charts:filter_multi_categories' %}',
                 method: 'get',
@@ -84,19 +79,15 @@
                     var names = response.names;
                     var values = response.values;
                     var percentages = response.percentages;
-                    debugger
-                    var multiCategoriesChart = new Chart(chart, {
+                    var colors = response.colors
+                    $('multiCategoriesChart').innerHTML = new Chart(chart, {
                         type: 'pie',
                         data: {
                             labels: names,
                             datasets: [{
                                 label: 'Pizza',
                                 data: values,
-                                backgroundColor: [
-                                    'rgb(255, 99, 132)',
-                                    'rgb(54, 162, 235)',
-                                    'rgb(255, 205, 86)'
-                                ],
+                                backgroundColor: colors,
                                 hoverOffset: 4
                             }]
                         },
@@ -107,22 +98,20 @@
                     console.log('não deu boa')
                 }
             })
-
-        });
+        }
 
     </script>
 
+    <script defer>
+        document.getElementById('id_cat_initial_date').value='{{standard_filter_date}}'
+        filterUniqueCategoryForm()
 
-    <script>
-        $("#category_filter_submit").click(function (){
-            let filterParams = {
-                category : $("#id_cat_category").val(),
-                initialDate : $("#id_cat_initial_date").val(),
-                finalDate : $("#id_cat_final_date").val(),
-                valueLte : $("#id_cat_value_lte").val(),
-                valueGte : $("#id_cat_value_gte").val(),
-                type : $("#id_cat_type").val(),
-            };
+        $("#category_filter_submit").click( ()=>{
+            filterUniqueCategoryForm()
+        })
+
+            function filterUniqueCategoryForm() {
+            let filterParams = $('#unique-category-form').serializeArray()
             $.ajax({
                 url : '{% url 'charts:filter_unique_category' %}',
                 method: 'get',
@@ -142,7 +131,7 @@
                                 label: 'Pizza',
                                 data: values,
                                 backgroundColor: [
-                                    'rgb(255, 99, 132)',
+                                    'rgb(213,109,131)',
                                     'rgb(54, 162, 235)',
                                     'rgb(255, 205, 86)'
                                 ],
@@ -157,8 +146,8 @@
                     console.log('não deu boa')
                 }
             })
+        }
 
-        });
     </script>
 
     <script defer>

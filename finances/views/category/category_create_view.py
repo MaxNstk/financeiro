@@ -17,7 +17,6 @@ class CategoryCreateView(CustomCreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        form.instance.slug = slugify(form.cleaned_data['name'])
         try:
             return super(CategoryCreateView, self).form_valid(form)
         except Exception as e:

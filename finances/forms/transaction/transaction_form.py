@@ -24,7 +24,7 @@ class TransactionForm(CustomModelForm):
         super(TransactionForm, self).__init__(*args, **kwargs)
         self.fields['category'].label = mark_safe('Categoria')
         self.fields['category'].required = False
-        self.fields['category'].queryset = Category.objects.filter(user=self.user)
+        self.fields['category'].queryset = Category.objects.filter(user=self.user).exclude(name='Descategorizado')
         self.fields['type'].label = mark_safe('<b> Tipo da Transação </b>')
 
     value = forms.FloatField(label=mark_safe('<b> Valor da Transação </b>'))

@@ -1,6 +1,7 @@
 
 from django.http import JsonResponse
 
+from finances.forms.transaction.multi_category_filter_form import MultiCategoryFilterForm
 from finances.models import Transaction
 
 
@@ -11,16 +12,16 @@ class FilterCategories:
         parameters = request.GET
 
         # getting the category
-        category = parameters.get('category', None)
+        category = parameters.get('cat_category', None)
         queryset = Transaction.objects.filter(user=request.user, category_id=category)
 
         # filtering type
-        type = parameters.get('type', None)
+        type = parameters.get('cat_type', None)
         queryset = queryset.filter(type=type)
 
         # filtering date
-        initial_date = parameters.get('initialDate', None)
-        final_date = parameters.get('finalDate', None)
+        initial_date = parameters.get('cat_initialDate', None)
+        final_date = parameters.get('cat_finalDate', None)
         for obj in queryset:
             obj.date = obj.date.strftime('%Y-%m-%d')
         if initial_date:
@@ -29,8 +30,8 @@ class FilterCategories:
             queryset = queryset.exclude(date__gt=final_date)
 
         # filtering value
-        value_lte = parameters.get('valueLte', None)
-        value_gte = parameters.get('valueGte', None)
+        value_lte = parameters.get('cat_valueLte', None)
+        value_gte = parameters.get('cat_valueGte', None)
         if value_lte:
             queryset = queryset.exclude(value__gt=float(value_lte))
         if value_gte:
@@ -49,9 +50,8 @@ class FilterCategories:
 
     @staticmethod
     def filter_multi_categories(request):
-        categories = request.GET.getlist('categories[]')
+        categories = request.GET.getlist('category')
         params = request.GET
-
         queryset = Transaction.objects.filter(user=request.user)
 
         # filter the category
@@ -66,8 +66,8 @@ class FilterCategories:
         for obj in queryset:
             obj.date = obj.date.strftime('%Y-%m-%d')
 
-        initial_date = params.get('initialDate', None)
-        final_date = params.get('finalDate', None)
+        initial_date = params.get('initial_date', None)
+        final_date = params.get('final_date', None)
         if initial_date:
             queryset = queryset.exclude(date__lt=initial_date)
         if final_date:
@@ -98,8 +98,8 @@ class FilterCategories:
                     value += obj.value
 
             #filters the value
-            value_lte = params.get('valueLte', None)
-            value_gte = params.get('valueGte', None)
+            value_lte = params.get('value_lte', None)
+            value_gte = params.get('value_gte', None)
             if value_lte:
                 if value > float(value_lte):
                     continue
@@ -109,26 +109,30 @@ class FilterCategories:
 
             categories.append({'name': category.name,
                                'value': value,
-                               'percentage': round((value / total_value * 100), 2)
+                               'percentage': round((value / total_value * 100), 2),
+                               'color' : category.color.lstrip('#')
                                })
 
         categories_names = []
         categories_values = []
         categories_percentages = []
-
+        categories_colors = []
         for category in categories:
             for k, v in category.items():
                 if k == 'name':
                     categories_names.append(v)
-                if k == 'value':
+                elif k == 'value':
                     categories_values.append(v)
-                if k == 'percentage':
+                elif k == 'percentage':
                     categories_percentages.append(v)
+                elif k == 'color':
+                    categories_colors.append(f'rgb{tuple(int(v[i:i+2], 16) for i in (0, 2, 4))}')
 
         response = {}
         response['categories'] = categories
         response['names'] = categories_names
         response['values'] = categories_values
         response['percentages'] = categories_percentages
+        response['colors'] = categories_colors
 
         return JsonResponse(response)

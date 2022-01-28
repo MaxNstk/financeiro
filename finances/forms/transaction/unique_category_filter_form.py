@@ -21,6 +21,7 @@ class UniqueCategoryFilterForm(Form):
         self.base_fields['cat_type'].initial = '2'
         super(UniqueCategoryFilterForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.attrs = {'id':'unique-category-form'}
         self.helper.layout = self.build_layout()
         for field in self.fields.values():
             field.required = False

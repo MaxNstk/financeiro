@@ -1,6 +1,6 @@
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Field, Submit, Button, ButtonHolder
+from crispy_forms.layout import Layout, Div, Field, Button, ButtonHolder
 from django.forms import ChoiceField, FloatField, DateField, Form
 from django.urls import reverse_lazy
 from django_filters.fields import ModelMultipleChoiceField
@@ -23,6 +23,7 @@ class MultiCategoryFilterForm(Form):
 
         super(MultiCategoryFilterForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.attrs = {'id':'multi-categories-form'}
         self.helper.layout = self.build_layout()
         for field in self.fields.values():
             field.required = False

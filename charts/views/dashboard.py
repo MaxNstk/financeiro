@@ -1,5 +1,4 @@
-import json
-
+import datetime
 from django.views.generic import TemplateView
 
 from finances.forms.transaction.multi_category_filter_form import MultiCategoryFilterForm
@@ -24,8 +23,7 @@ class DashboardView(TemplateView):
 
         # todo fazer metodo para trazer a categoria com mais transações
         UniqueCategoryFilterForm.base_fields['cat_category'].initial = Category.objects.get(user=self.request.user, name='Mercado')
-
         ctx['multi_categories_form'] = MultiCategoryFilterForm
         ctx['unique_category_form'] = UniqueCategoryFilterForm
-
+        ctx['standard_filter_date'] = (datetime.datetime.now() - datetime.timedelta(30)).strftime('%Y-%m-%d')
         return ctx

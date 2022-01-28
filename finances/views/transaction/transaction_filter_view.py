@@ -1,12 +1,16 @@
 import datetime
 
+from finances.models import Transaction
+
 
 class TransactionFilterView:
 
     filters = {}
+    categories = None
 
     def get(self, request, *args, **kwargs):
         self.filters = dict(map(lambda k: (k, request.GET[k]), request.GET))
+        self.categories = request.GET.getlist('category')
         if 'csrfmiddlewaretoken' in self.filters:
             self.filters.pop('csrfmiddlewaretoken')
         self.get_initial()
@@ -27,11 +31,16 @@ class TransactionFilterView:
             field[1].initial = None
 
         # setting filters
+        new_filters = {}
         for key, value in self.filters.items():
             if key == 'submit' or key == 'len':
                 continue
+            new_filters[key] = value
             self.form_class.base_fields[key].initial = value
-        return self.filters
+        if self.categories:
+            self.form_class.base_fields['category'].initial = self.categories
+            new_filters['category'] = self.categories
+        return new_filters
 
     def filter_date(self, queryset):
         initial_date = self.filters.get('initial_date', None)
@@ -47,9 +56,13 @@ class TransactionFilterView:
         return queryset
 
     def filter_category(self, queryset):
-        category = self.filters.get('category', None)
-        if category:
-            queryset = queryset.filter(category_id=category)
+        if self.categories:
+            querysets = []
+            for category in self.categories:
+                querysets.append(queryset.filter(category_id=category))
+            queryset = Transaction.objects.none()
+            for qs in querysets:
+                queryset = queryset | qs
         return queryset
 
     def filter_value(self, queryset):

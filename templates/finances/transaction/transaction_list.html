@@ -43,3 +43,11 @@
             </svg> </a> </td>
     {% endif %}
 {% endblock %}
+
+{% block scripts %}
+    <script defer>
+        $('#id_category').select2({
+            placeholder: 'Selecione uma ou mais Categorias'
+        })
+    </script>
+{% endblock %}

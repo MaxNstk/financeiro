@@ -20,6 +20,8 @@ class TransactionCreateView(CustomCreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        if not form.instance.category:
+            form.instance.category = Category.objects.get(name='Descategorizado')
         try:
             return super(TransactionCreateView, self).form_valid(form)
         except Exception as e:

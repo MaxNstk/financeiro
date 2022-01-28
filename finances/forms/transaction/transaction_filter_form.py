@@ -5,7 +5,7 @@ from django.forms import ChoiceField, FloatField, DateField, ModelForm
 from django.urls import reverse_lazy
 from django_filters.fields import ModelMultipleChoiceField
 
-from finances.models import Transaction
+from finances.models import Transaction, Category
 from finances.forms.transaction.transaction_form import DateInput
 
 
@@ -23,6 +23,8 @@ class TransactionFilterForm(ModelForm):
     category = ModelMultipleChoiceField(queryset=None, label='Categoria')
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        self.base_fields['category'].queryset = Category.objects.filter(user=user)
         self.base_fields['category'].label = 'Categoria'
         self.base_fields['type'].initial = '2'
 
@@ -50,7 +52,7 @@ class TransactionFilterForm(ModelForm):
             ButtonHolder(
                 Submit('submit', 'Filtrar', css_class='btn btn-primary', css_id='multi_categories_submit'),
                 Button('cancel', 'Remover Filtros', css_class='btn-primary',
-                       onclick=f"window.location.href = '{reverse_lazy('charts:dashboard')}'"),
+                       onclick=f"window.location.href = '{reverse_lazy('finances:transaction_list')}'"),
             ),
 
         )
