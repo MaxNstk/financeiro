@@ -10,7 +10,7 @@
 {% block chart1 %}
     <div class="card-header">
         <i class="fas fa-chart-area me-1"></i>
-        Gráficos de Valores por Categoria
+        <b>Gráfico de valores por categoria</b>
     </div>
     <div class="card-body">
         <canvas id="multiCategoriesChart" width="50%" height="50%"> </canvas>
@@ -20,21 +20,24 @@
 {% block chart2 %}
     <div class="card-header">
         <i class="fas fa-chart-bar me-1"></i>
-        Gráficos de Valores por Categoria
+        <b>Relatório de valores por categoria</b>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table" id="table1">
+            <table class="table" id="table1" style="text-align: center">
                 <thead>
                 <tr>
-                    <td>
-                        <b> Teste </b>
-                    </td>
+                    <td> <b>Categoria</b> </td>
+                    <td> <b>Valor</b> </td>
+                    <td> <b>Percentual</b> </td>
                 </tr>
                 </thead>
-                <tbody id="tbody1">
 
+                <tbody id="tbody1">
                 </tbody>
+                <tfoot id="tfoot1">
+                </tfoot>
+
             </table>
 
         </div>
@@ -48,11 +51,38 @@
 {% block chart3 %}
     <div class="card-header">
         <i class="fas fa-chart-area me-1"></i>
-        <b id="chart3-title">Gráfico para Categorias</b>
+        <b id="chart3-title"></b>
     </div>
     <div class="card-body">
         <canvas id="categoriesChart" width="50%" height="50%"> </canvas>
     </div>
+{% endblock %}
+
+{% block chart4 %}
+
+    <div class="card-header">
+        <i class="fas fa-chart-bar me-1"></i>
+        <b id="unique_category_report"> </b>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table" id="table2" style="text-align: center">
+                <thead>
+                <tr>
+                    <td><b> Data </b></td>
+                    <td><b> Valor </b></td>
+                    <td><b> Percentual </b></td>
+                </tr>
+                </thead>
+                <tbody id="tbody2">
+                </tbody>
+                <tfoot id="tfoot2">
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -60,15 +90,15 @@
     {# Filters the multi categories chart #}
 
     {# initial chart, filtered by -30 days #}
+
     <script defer>
         document.getElementById('id_initial_date').value='{{standard_filter_date}}'
         filterMultiCategoriesForm()
 
-        $("#multi_categories_submit").click( ()=> {
+        $("#multi_categories_submit").click(()=>{
             filterMultiCategoriesForm()
         });
-
-            function filterMultiCategoriesForm(){
+        function filterMultiCategoriesForm(){
             let filterParams = $('#multi-categories-form').serializeArray()
             $.ajax({
                 url : '{% url 'charts:filter_multi_categories' %}',
@@ -76,23 +106,26 @@
                 data: filterParams,
                 success: (response) => {
                     var chart = document.getElementById('multiCategoriesChart');
-                    var names = response.names;
-                    var values = response.values;
-                    var percentages = response.percentages;
-                    var colors = response.colors
+
                     $('multiCategoriesChart').innerHTML = new Chart(chart, {
                         type: 'pie',
                         data: {
-                            labels: names,
+                            labels: response.names,
                             datasets: [{
                                 label: 'Pizza',
-                                data: values,
-                                backgroundColor: colors,
+                                data: response.values,
+                                backgroundColor: response.colors,
                                 hoverOffset: 4
                             }]
                         },
                     });
-                    console.log('deu boa')
+                    $('#tbody1').empty();
+                    for (const [key, value] of Object.entries(response.categories)){
+                        $('#tbody1').append("<tr><td>"+value.name+"</td><td>R$: "+value.value+"</td><td>"+value.percentage+"%</td></tr>");
+
+                    }
+                    $('#tfoot1').empty();
+                    $('#tfoot1').append("<tr><td><b>Total</b></td><td><b>R$: "+response.total_value+"</b></td><td><b>100%</b></td></tr>");
                 },
                 error: function(){
                     console.log('não deu boa')
@@ -106,11 +139,11 @@
         document.getElementById('id_cat_initial_date').value='{{standard_filter_date}}'
         filterUniqueCategoryForm()
 
-        $("#category_filter_submit").click( ()=>{
+        $("#unique_category_filter_submit").click( ()=>{
             filterUniqueCategoryForm()
         })
 
-            function filterUniqueCategoryForm() {
+        function filterUniqueCategoryForm() {
             let filterParams = $('#unique-category-form').serializeArray()
             $.ajax({
                 url : '{% url 'charts:filter_unique_category' %}',
@@ -119,17 +152,15 @@
                 success: (response) => {
                     var chart = document.getElementById('categoriesChart')
 
-                    var category = response.category;
-                    var values = response.values;
-                    var dates = response.dates;
-                    document.getElementById('chart3-title').innerHTML= 'Grafico de gastos em: '+category
+                    document.getElementById('chart3-title').innerHTML= 'Grafico de valores da categoria: '+response.category
+                    document.getElementById('unique_category_report').innerHTML= 'Relatório de valores da categoria: '+response.category
                     var categoriesChart = new Chart(chart, {
                         type: 'pie',
                         data: {
-                            labels: dates,
+                            labels: response.dates,
                             datasets: [{
                                 label: 'Pizza',
-                                data: values,
+                                data: response.values,
                                 backgroundColor: [
                                     'rgb(213,109,131)',
                                     'rgb(54, 162, 235)',
@@ -140,7 +171,12 @@
                         },
                     });
 
-                    console.log('deu boa')
+                    $('#tbody2').empty();
+                    for (const [key, value] of Object.entries(response.transactions)){
+                        $('#tbody2').append("<tr><td>"+value.date+"</td><td>R$: "+value.value+"</td><td>"+value.percentage+"%</td></tr>");
+                    }
+                    $('#tfoot2').empty();
+                    $('#tfoot2').append("<tr><td><b>Total</b></td><td><b>R$: "+response.total_value+"</b></td><td><b>100%</b></td></tr>");
                 },
                 error: function(){
                     console.log('não deu boa')

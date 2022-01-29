@@ -42,9 +42,8 @@ class UniqueCategoryFilterForm(Form):
                 css_class='row', style='margin-bottom: 1%;'
             ),
             ButtonHolder(
-                Button('submit', 'Filtrar', css_class='btn btn-primary', css_id='category_filter_submit'),
-                Button('cancel', 'Remover Filtros', css_class='btn-primary', css_id='category_filter_cancel',
-                       onclick=f"window.location.href = '{reverse_lazy('charts:dashboard')}'"),
+                Button('', 'Filtrar', css_class='btn btn-primary', css_id='unique_category_submit'),
+                Button('', 'Remover Filtros', css_class='btn-primary', css_id='unique_category_clean_filters')
             ),
 
         )

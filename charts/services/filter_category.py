@@ -37,14 +37,26 @@ class FilterCategories:
         if value_gte:
             queryset = queryset.exclude(value__lt=float(value_gte))
 
+        total_value = 0
+        queryset = queryset.order_by('-date')
+        for obj in queryset:
+            total_value += obj.value
+
         response = {}
         response['values'] = []
         response['dates'] = []
+        response['transactions'] = []
+        response['total_value'] = 0
 
         for obj in queryset:
+            response['transactions'].append({'value':obj.value,
+                                             'date': obj.date,
+                                            'percentage': round((obj.value/total_value * 100), 2)})
+
             response['category'] = obj.category.name
             response['values'].append(obj.value)
             response['dates'].append(obj.date)
+            response['total_value'] += obj.value
 
         return JsonResponse(response)
 
@@ -72,6 +84,9 @@ class FilterCategories:
             queryset = queryset.exclude(date__lt=initial_date)
         if final_date:
             queryset = queryset.exclude(date__gt=final_date)
+
+        for obj in queryset:
+            obj.date = obj.date.strftime('%Y-%m-%d')
 
         type = params.get('type', None)
         queryset = queryset.filter(type=type)
@@ -110,7 +125,7 @@ class FilterCategories:
             categories.append({'name': category.name,
                                'value': value,
                                'percentage': round((value / total_value * 100), 2),
-                               'color' : category.color.lstrip('#')
+                               'color': category.color.lstrip('#')
                                })
 
         categories_names = []
@@ -132,7 +147,6 @@ class FilterCategories:
         response['categories'] = categories
         response['names'] = categories_names
         response['values'] = categories_values
-        response['percentages'] = categories_percentages
         response['colors'] = categories_colors
-
+        response['total_value'] = total_value
         return JsonResponse(response)

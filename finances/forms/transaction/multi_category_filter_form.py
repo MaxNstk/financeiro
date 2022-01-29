@@ -44,9 +44,8 @@ class MultiCategoryFilterForm(Form):
                 css_class='row', style='margin-bottom: 1%;'
             ),
             ButtonHolder(
-                Button('submit', 'Filtrar', css_class='btn btn-primary', css_id='multi_categories_submit'),
-                Button('cancel', 'Remover Filtros', css_class='btn-primary',
-                       onclick=f"window.location.href = '{reverse_lazy('charts:dashboard')}'"),
+                Button('', 'Filtrar', css_class='btn btn-primary', css_id='multi_categories_submit'),
+                Button('', 'Remover Filtros', css_class='btn-primary', css_id='multi_categories_clean_filters')
             ),
 
         )

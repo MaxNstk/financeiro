@@ -43,15 +43,19 @@ class TransactionFilterView:
         return new_filters
 
     def filter_date(self, queryset):
-        initial_date = self.filters.get('initial_date', None)
-        final_date = self.filters.get('final_date', None)
         for obj in queryset:
             obj.date = obj.date.strftime('%Y-%m-%d')
+
+        initial_date = self.filters.get('initial_date', None)
+        final_date = self.filters.get('final_date', None)
 
         if initial_date:
             queryset = queryset.exclude(date__lt=initial_date)
         if final_date:
             queryset = queryset.exclude(date__gt=final_date)
+
+        for obj in queryset:
+            obj.date = obj.date.strftime('%d-%m-%Y')
 
         return queryset
 
