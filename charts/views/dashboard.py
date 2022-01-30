@@ -18,11 +18,13 @@ class DashboardView(TemplateView):
 
         # setting the available categories in the form
         available_categories = Category.objects.filter(user=self.request.user)
+
         MultiCategoryFilterForm.base_fields['category'].queryset = available_categories
         UniqueCategoryFilterForm.base_fields['cat_category'].queryset = available_categories
 
         # todo fazer metodo para trazer a categoria com mais transações
         UniqueCategoryFilterForm.base_fields['cat_category'].initial = Category.objects.get(user=self.request.user, name='Mercado')
+
         ctx['multi_categories_form'] = MultiCategoryFilterForm
         ctx['unique_category_form'] = UniqueCategoryFilterForm
         ctx['standard_filter_date'] = (datetime.datetime.now() - datetime.timedelta(30)).strftime('%Y-%m-%d')

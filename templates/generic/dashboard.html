@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block chart1 %}
+
     <div class="card-header">
         <i class="fas fa-chart-area me-1"></i>
         <b>Gráfico de valores por categoria</b>
@@ -15,9 +16,11 @@
     <div class="card-body">
         <canvas id="multiCategoriesChart" width="50%" height="50%"> </canvas>
     </div>
+
 {% endblock %}
 
 {% block chart2 %}
+
     <div class="card-header">
         <i class="fas fa-chart-bar me-1"></i>
         <b>Relatório de valores por categoria</b>
@@ -87,23 +90,35 @@
 
 {% block scripts %}
 
-    {# Filters the multi categories chart #}
-
-    {# initial chart, filtered by -30 days #}
-
     <script defer>
+
+        {#  sets the initial value in the date field and load the chart  #}
         document.getElementById('id_initial_date').value='{{standard_filter_date}}'
         filterMultiCategoriesForm()
 
         $("#multi_categories_submit").click(()=>{
             filterMultiCategoriesForm()
         });
+
+        {# clean the filters and set the initial date value #}
+        $('#multi_categories_clean_filters').click(()=>{
+            document.getElementById('multi-categories-form').reset();
+            $("#id_category").select2("val", " ");
+             document.getElementById('id_initial_date').value='{{standard_filter_date}}'
+            filterMultiCategoriesForm();
+        });
+
+        {# function that filters the form #}
         function filterMultiCategoriesForm(){
+
             let filterParams = $('#multi-categories-form').serializeArray()
+            {# sends the data of the fields for the backend with ajax  #}
             $.ajax({
                 url : '{% url 'charts:filter_multi_categories' %}',
                 method: 'get',
                 data: filterParams,
+
+                {# load the chart with the filtered data #}
                 success: (response) => {
                     var chart = document.getElementById('multiCategoriesChart');
 
@@ -119,11 +134,13 @@
                             }]
                         },
                     });
+                    {# cleans the body of the report and assembles the new one #}
                     $('#tbody1').empty();
                     for (const [key, value] of Object.entries(response.categories)){
                         $('#tbody1').append("<tr><td>"+value.name+"</td><td>R$: "+value.value+"</td><td>"+value.percentage+"%</td></tr>");
 
                     }
+                    {# cleans the footer of the report and assembles the new one #}
                     $('#tfoot1').empty();
                     $('#tfoot1').append("<tr><td><b>Total</b></td><td><b>R$: "+response.total_value+"</b></td><td><b>100%</b></td></tr>");
                 },
@@ -135,15 +152,30 @@
 
     </script>
 
+    {#  masks the multi category select field  #}
     <script defer>
+        $('#id_category').select2({
+            placeholder: 'Selecione uma ou mais Categorias'
+        })
+    </script>
+
+    <script defer>
+
         document.getElementById('id_cat_initial_date').value='{{standard_filter_date}}'
         filterUniqueCategoryForm()
 
-        $("#unique_category_filter_submit").click( ()=>{
+        $("#unique_category_submit").click(()=>{
             filterUniqueCategoryForm()
-        })
+        });
+
+        $('#unique_category_clean_filters').click(()=>{
+            document.getElementById('unique-category-form').reset();
+             document.getElementById('id_cat_initial_date').value='{{standard_filter_date}}'
+            filterUniqueCategoryForm();
+        });
 
         function filterUniqueCategoryForm() {
+
             let filterParams = $('#unique-category-form').serializeArray()
             $.ajax({
                 url : '{% url 'charts:filter_unique_category' %}',
@@ -186,9 +218,4 @@
 
     </script>
 
-    <script defer>
-        $('#id_category').select2({
-            placeholder: 'Selecione uma ou mais Categorias'
-        })
-    </script>
 {% endblock %}

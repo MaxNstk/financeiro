@@ -2,7 +2,6 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Field, Button, ButtonHolder
 from django.forms import ChoiceField, FloatField, DateField, Form
-from django.urls import reverse_lazy
 from django_filters.fields import ModelMultipleChoiceField
 
 from finances.forms.transaction.transaction_form import DateInput
@@ -27,7 +26,6 @@ class MultiCategoryFilterForm(Form):
         self.helper.layout = self.build_layout()
         for field in self.fields.values():
             field.required = False
-        self.helper.form_method = 'get'
 
     def build_layout(self):
         return Layout(

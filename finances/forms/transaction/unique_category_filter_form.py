@@ -1,7 +1,6 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Field, Button, ButtonHolder
 from django.forms import ChoiceField, FloatField, DateField, Form, ModelChoiceField
-from django.urls import reverse_lazy
 
 from finances.forms.transaction.transaction_form import DateInput
 
@@ -25,7 +24,6 @@ class UniqueCategoryFilterForm(Form):
         self.helper.layout = self.build_layout()
         for field in self.fields.values():
             field.required = False
-        self.helper.form_method = 'get'
 
     def build_layout(self):
         return Layout(
