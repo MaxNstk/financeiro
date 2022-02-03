@@ -13,7 +13,7 @@
         <i class="fas fa-chart-area me-1"></i>
         <b>Gráfico de valores por categoria</b>
     </div>
-    <div class="card-body">
+    <div class="card-body" id="canvas1">
         <canvas id="multiCategoriesChart" width="50%" height="50%"> </canvas>
     </div>
 
@@ -92,53 +92,54 @@
 
     <script defer>
 
-        {#  sets the initial value in the date field and load the chart  #}
-        document.getElementById('id_initial_date').value='{{standard_filter_date}}'
-        filterMultiCategoriesForm()
+        function createChart(chartLocation, labels, data, colors ) {
+            return new Chart(chartLocation, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        hoverOffset: 4
+                    }]
+                },
+            });
+        }
 
-        $("#multi_categories_submit").click(()=>{
-            filterMultiCategoriesForm()
-        });
+        function updateChart(chart, labels, data) {
+            deleteChart(chart)
+            {#chart.data.labels.push(label);#}
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(data);
+            });
+            chart.update();
+        }
 
-        {# clean the filters and set the initial date value #}
-        $('#multi_categories_clean_filters').click(()=>{
-            document.getElementById('multi-categories-form').reset();
-            $("#id_category").select2("val", " ");
-             document.getElementById('id_initial_date').value='{{standard_filter_date}}'
-            filterMultiCategoriesForm();
-        });
+        function deleteChart(chart){
+            chart.data.labels.pop();
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.pop();
+            });
+            chart.update();
+        }
 
-        {# function that filters the form #}
         function filterMultiCategoriesForm(){
-
             let filterParams = $('#multi-categories-form').serializeArray()
-            {# sends the data of the fields for the backend with ajax  #}
             $.ajax({
                 url : '{% url 'charts:filter_multi_categories' %}',
                 method: 'get',
                 data: filterParams,
-
-                {# load the chart with the filtered data #}
                 success: (response) => {
-                    var chart = document.getElementById('multiCategoriesChart');
+                    var chartLocation = $('#multiCategoriesChart');
+                    var pie_chart = createChart(chartLocation, response.names, response.values, response.colors)
+                    deleteChart(pie_chart)
+                    updateChart(pie_chart, ['lab', 'add'], [25, 58])
 
-                    $('multiCategoriesChart').innerHTML = new Chart(chart, {
-                        type: 'pie',
-                        data: {
-                            labels: response.names,
-                            datasets: [{
-                                label: 'Pizza',
-                                data: response.values,
-                                backgroundColor: response.colors,
-                                hoverOffset: 4
-                            }]
-                        },
-                    });
+
                     {# cleans the body of the report and assembles the new one #}
                     $('#tbody1').empty();
                     for (const [key, value] of Object.entries(response.categories)){
                         $('#tbody1').append("<tr><td>"+value.name+"</td><td>R$: "+value.value+"</td><td>"+value.percentage+"%</td></tr>");
-
                     }
                     {# cleans the footer of the report and assembles the new one #}
                     $('#tfoot1').empty();
@@ -149,6 +150,20 @@
                 }
             })
         }
+
+        {#  sets the initial value in the date field and load the chart  #}
+        filterMultiCategoriesForm()
+
+        $("#multi_categories_submit").click(()=>{
+            filterMultiCategoriesForm()
+        });
+
+        {# clean the filters and set the initial date value #}
+        $('#multi_categories_clean_filters').click(()=>{
+            document.getElementById('multi-categories-form').reset();
+            $("#id_category").select2("val", " ");
+            filterMultiCategoriesForm();
+        });
 
     </script>
 
@@ -170,7 +185,7 @@
 
         $('#unique_category_clean_filters').click(()=>{
             document.getElementById('unique-category-form').reset();
-             document.getElementById('id_cat_initial_date').value='{{standard_filter_date}}'
+            document.getElementById('id_cat_initial_date').value='{{standard_filter_date}}'
             filterUniqueCategoryForm();
         });
 
@@ -183,25 +198,14 @@
                 data: filterParams,
                 success: (response) => {
                     var chart = document.getElementById('categoriesChart')
+                    var colors = [ 'rgb(213,109,131)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)']
+                    createChart(chart, response.dates, response.values, colors)
 
                     document.getElementById('chart3-title').innerHTML= 'Grafico de valores da categoria: '+response.category
                     document.getElementById('unique_category_report').innerHTML= 'Relatório de valores da categoria: '+response.category
-                    var categoriesChart = new Chart(chart, {
-                        type: 'pie',
-                        data: {
-                            labels: response.dates,
-                            datasets: [{
-                                label: 'Pizza',
-                                data: response.values,
-                                backgroundColor: [
-                                    'rgb(213,109,131)',
-                                    'rgb(54, 162, 235)',
-                                    'rgb(255, 205, 86)'
-                                ],
-                                hoverOffset: 4
-                            }]
-                        },
-                    });
+
 
                     $('#tbody2').empty();
                     for (const [key, value] of Object.entries(response.transactions)){

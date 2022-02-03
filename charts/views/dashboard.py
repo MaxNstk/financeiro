@@ -27,5 +27,4 @@ class DashboardView(TemplateView):
 
         ctx['multi_categories_form'] = MultiCategoryFilterForm
         ctx['unique_category_form'] = UniqueCategoryFilterForm
-        ctx['standard_filter_date'] = (datetime.datetime.now() - datetime.timedelta(30)).strftime('%Y-%m-%d')
         return ctx

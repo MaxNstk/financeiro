@@ -9,7 +9,7 @@ from django.utils.http import urlsafe_base64_encode
 from account.forms.register import RegisterForm
 from account.models import User
 from account.tokens.activation_token import activation_token
-from financeiro import settings
+from core import settings
 from finances.views.generic.custom_create_view import CustomCreateView
 
 

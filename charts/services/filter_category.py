@@ -1,3 +1,5 @@
+import datetime
+
 from django.db.models import Sum
 from django.http import JsonResponse
 
@@ -52,8 +54,14 @@ class FilterCategories:
 
         categories = request.GET.getlist('category')
         params = request.GET
+        initial_date = params.get('initial_date', None)
+        if not initial_date:
+            initial_date = (datetime.datetime.now() - datetime.timedelta(30)).strftime('%Y-%m-%d')
 
-        queryset = Transaction.objects.filter(user=request.user)
+        # getting the queryset and filtering the date
+        queryset = Transaction.objects.filter(user=request.user, date__gte=initial_date)
+        if params.get('final_date', None):
+            queryset = queryset.exclude(date__gt=params['final_date'])
 
         # filtering the category
         if categories:
@@ -64,13 +72,7 @@ class FilterCategories:
             for qs in querysets:
                 queryset = queryset | qs
 
-        # filtering the date
-        if params.get('initial_date', None):
-            queryset = queryset.exclude(date__lt=params['initial_date'])
-        if params.get('final_date', None):
-            queryset = queryset.exclude(date__gt=params['final_date'])
-
-        #filtering the type
+        # filtering the type
         queryset = queryset.filter(type=params['type'])
         total_value = queryset.aggregate(Sum('value'))['value__sum']
 
