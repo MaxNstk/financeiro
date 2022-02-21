@@ -14,5 +14,6 @@ urlpatterns = [
     path('finances/', include('finances.urls', namespace='finances')),
     path('charts/', include('charts.urls', namespace='charts')),
     path('', login_required(HomeView.as_view()), name='home'),
+    path('api/v1/', include('api.urls', namespace='api'))
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'account',
     'crispy_forms',
     'colorfield',
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 
